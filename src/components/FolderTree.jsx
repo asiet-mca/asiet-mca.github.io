@@ -25,10 +25,10 @@ function TreeNode({ node, currentPath, onNavigate, depth = 0 }) {
       <button
         onClick={handleClick}
         className={cn(
-          "group relative flex w-full items-center gap-1.5 py-[5px] pr-2 text-left text-[13px] transition-colors",
+          "group relative flex w-full items-center gap-1.5 py-[5px] pr-2 text-left text-[13px] transition-colors cursor-pointer",
           isActive
             ? "bg-accent-muted text-accent font-medium"
-            : "text-text-secondary hover:bg-hover"
+            : "text-text-secondary hover:bg-hover active:bg-active"
         )}
         style={{ paddingLeft: `${depth * 12 + 12}px` }}
       >

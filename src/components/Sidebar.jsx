@@ -1,4 +1,4 @@
-import { GraduationCap, SidebarSimple } from "@phosphor-icons/react";
+import { SidebarSimple } from "@phosphor-icons/react";
 import FolderTree from "./FolderTree";
 import { cn } from "../lib/utils";
 
@@ -13,18 +13,21 @@ export default function Sidebar({ tree, currentPath, onNavigate, collapsed, onTo
       {/* Header — fixed 48px to match PathBar */}
       <div className="flex h-12 shrink-0 items-center justify-between border-b border-border px-3">
         {!collapsed && (
-          <div className="flex items-center gap-2">
-            <div className="flex h-6 w-6 items-center justify-center rounded bg-accent">
-              <GraduationCap size={14} weight="fill" className="text-white" />
-            </div>
-            <span className="font-display text-[13px] font-semibold text-text-primary">
-              ASIET MCA
+          <div className="flex items-center gap-2.5">
+            <img
+              src="/images/logos/asiet-logo.png"
+              alt="ASIET"
+              className="h-6 w-auto"
+            />
+            <div className="h-3.5 w-px bg-border" />
+            <span className="text-[11px] font-medium tracking-wide text-accent uppercase">
+              MCA
             </span>
           </div>
         )}
         <button
           onClick={onToggle}
-          className="flex h-7 w-7 items-center justify-center rounded text-text-tertiary transition-colors hover:bg-hover hover:text-text-secondary"
+          className="flex h-7 w-7 items-center justify-center rounded text-text-tertiary transition-colors cursor-pointer hover:bg-hover hover:text-text-secondary"
         >
           <SidebarSimple size={16} weight="regular" />
         </button>

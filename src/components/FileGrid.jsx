@@ -10,8 +10,8 @@ function GridCard({ item, onOpen }) {
     <button
       onClick={() => onOpen(item)}
       className={cn(
-        "group flex flex-col items-center gap-2 rounded-lg border border-transparent p-4 text-center transition-all duration-100",
-        "hover:border-border hover:bg-surface"
+        "group flex flex-col items-center gap-2 rounded-lg border border-transparent p-4 text-center transition-all duration-100 cursor-pointer select-none",
+        "hover:border-border hover:bg-surface hover:shadow-sm active:scale-[0.97]"
       )}
     >
       <div className="flex h-12 w-12 items-center justify-center">
@@ -46,8 +46,8 @@ function ListRow({ item, onOpen }) {
     <button
       onClick={() => onOpen(item)}
       className={cn(
-        "group flex w-full items-center gap-3 border-b border-border-subtle px-4 py-2.5 text-left transition-colors duration-75",
-        "hover:bg-hover"
+        "group flex w-full items-center gap-3 border-b border-border-subtle px-4 py-2.5 text-left transition-colors duration-75 cursor-pointer",
+        "hover:bg-hover active:bg-active"
       )}
     >
       <div className="flex w-5 shrink-0 items-center justify-center">

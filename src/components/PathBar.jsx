@@ -31,7 +31,7 @@ export default function PathBar({
           className={cn(
             "flex h-7 w-7 items-center justify-center rounded transition-colors",
             canGoBack
-              ? "text-text-secondary hover:bg-hover hover:text-text-primary"
+              ? "cursor-pointer text-text-secondary hover:bg-hover hover:text-text-primary active:bg-active"
               : "cursor-not-allowed text-text-quaternary"
           )}
         >
@@ -43,7 +43,7 @@ export default function PathBar({
           className={cn(
             "flex h-7 w-7 items-center justify-center rounded transition-colors",
             canGoForward
-              ? "text-text-secondary hover:bg-hover hover:text-text-primary"
+              ? "cursor-pointer text-text-secondary hover:bg-hover hover:text-text-primary active:bg-active"
               : "cursor-not-allowed text-text-quaternary"
           )}
         >
@@ -55,7 +55,7 @@ export default function PathBar({
       <div className="flex flex-1 items-center gap-px rounded border border-border bg-bg px-2 py-[5px] font-mono text-[12.5px]">
         <button
           onClick={() => onNavigate("/")}
-          className="flex items-center rounded px-1 text-text-tertiary transition-colors hover:bg-hover hover:text-accent"
+          className="flex items-center rounded px-1 text-text-tertiary transition-colors cursor-pointer hover:bg-hover hover:text-accent"
         >
           <House size={13} weight="bold" />
         </button>
@@ -65,7 +65,7 @@ export default function PathBar({
             <button
               onClick={() => onNavigate(crumb.path)}
               className={cn(
-                "rounded px-1 py-px transition-colors hover:bg-hover hover:text-accent",
+                "rounded px-1 py-px transition-colors cursor-pointer hover:bg-hover hover:text-accent",
                 i === crumbs.length - 2
                   ? "text-text-primary"
                   : "text-text-tertiary"
@@ -82,10 +82,10 @@ export default function PathBar({
         <button
           onClick={() => onToggleView("grid")}
           className={cn(
-            "flex h-7 w-7 items-center justify-center rounded-l transition-colors",
+            "flex h-7 w-7 items-center justify-center rounded-l transition-colors cursor-pointer",
             viewMode === "grid"
               ? "bg-active text-text-primary"
-              : "text-text-tertiary hover:text-text-secondary"
+              : "text-text-tertiary hover:text-text-secondary hover:bg-hover"
           )}
         >
           <SquaresFour size={15} weight={viewMode === "grid" ? "fill" : "regular"} />
@@ -93,10 +93,10 @@ export default function PathBar({
         <button
           onClick={() => onToggleView("list")}
           className={cn(
-            "flex h-7 w-7 items-center justify-center rounded-r border-l border-border transition-colors",
+            "flex h-7 w-7 items-center justify-center rounded-r border-l border-border transition-colors cursor-pointer",
             viewMode === "list"
               ? "bg-active text-text-primary"
-              : "text-text-tertiary hover:text-text-secondary"
+              : "text-text-tertiary hover:text-text-secondary hover:bg-hover"
           )}
         >
           <List size={15} weight={viewMode === "list" ? "bold" : "regular"} />
