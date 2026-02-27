@@ -9,6 +9,7 @@ export default function Explorer() {
   const [history, setHistory] = useState(["/"]);
   const [historyIndex, setHistoryIndex] = useState(0);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [viewMode, setViewMode] = useState("grid");
 
   const currentNode = findNodeByPath(currentPath);
@@ -54,13 +55,31 @@ export default function Explorer() {
 
   return (
     <div className="flex h-screen overflow-hidden bg-bg">
-      <Sidebar
-        tree={fileSystem}
-        currentPath={currentPath}
-        onNavigate={navigateTo}
-        collapsed={sidebarCollapsed}
-        onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
-      />
+      {/* Sidebar: hidden on mobile, visible on desktop */}
+      <div className="hidden md:flex">
+        <Sidebar
+          tree={fileSystem}
+          currentPath={currentPath}
+          onNavigate={navigateTo}
+          collapsed={sidebarCollapsed}
+          onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+          mobileOpen={false}
+          onMobileClose={() => {}}
+        />
+      </div>
+
+      {/* Mobile sidebar overlay */}
+      <div className="md:hidden">
+        <Sidebar
+          tree={fileSystem}
+          currentPath={currentPath}
+          onNavigate={navigateTo}
+          collapsed={false}
+          onToggle={() => {}}
+          mobileOpen={mobileOpen}
+          onMobileClose={() => setMobileOpen(false)}
+        />
+      </div>
 
       <div className="flex flex-1 flex-col overflow-hidden">
         <PathBar
@@ -72,11 +91,12 @@ export default function Explorer() {
           onForward={goForward}
           viewMode={viewMode}
           onToggleView={setViewMode}
+          onMenuToggle={() => setMobileOpen(true)}
         />
 
         {/* Content header */}
         {currentNode && currentPath !== "/" && (
-          <div className="flex items-baseline gap-3 bg-bg px-5 pt-4 pb-2">
+          <div className="flex items-baseline gap-3 bg-bg px-4 pt-4 pb-2 sm:px-5">
             <h2 className="font-display text-lg font-semibold text-text-primary">
               {currentNode.name}
             </h2>
@@ -99,7 +119,7 @@ export default function Explorer() {
         {/* Status bar */}
         <div className="flex h-7 shrink-0 items-center justify-between border-t border-border bg-surface px-4 font-mono text-[11px] text-text-quaternary">
           <span>{(currentNode?.children?.length || 0)} items</span>
-          <span>{currentPath}</span>
+          <span className="truncate ml-2">{currentPath}</span>
         </div>
       </div>
     </div>

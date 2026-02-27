@@ -5,6 +5,7 @@ import {
   House,
   List,
   SquaresFour,
+  SidebarSimple,
 } from "@phosphor-icons/react";
 import { getBreadcrumbs } from "../data/fileSystem";
 import { cn } from "../lib/utils";
@@ -18,11 +19,20 @@ export default function PathBar({
   onForward,
   viewMode,
   onToggleView,
+  onMenuToggle,
 }) {
   const crumbs = getBreadcrumbs(currentPath);
 
   return (
-    <div className="flex h-12 shrink-0 items-center gap-2 border-b border-border bg-surface px-3">
+    <div className="flex h-12 shrink-0 items-center gap-1.5 border-b border-border bg-surface px-2 sm:gap-2 sm:px-3">
+      {/* Mobile menu toggle */}
+      <button
+        onClick={onMenuToggle}
+        className="flex h-7 w-7 shrink-0 items-center justify-center rounded text-text-secondary transition-colors cursor-pointer hover:bg-hover md:hidden"
+      >
+        <SidebarSimple size={16} weight="regular" />
+      </button>
+
       {/* Navigation buttons */}
       <div className="flex items-center">
         <button
@@ -51,21 +61,21 @@ export default function PathBar({
         </button>
       </div>
 
-      {/* Breadcrumb bar */}
-      <div className="flex flex-1 items-center gap-px rounded border border-border bg-bg px-2 py-[5px] font-mono text-[12.5px]">
+      {/* Breadcrumb bar — horizontally scrollable on mobile */}
+      <div className="flex min-w-0 flex-1 items-center gap-px overflow-x-auto rounded border border-border bg-bg px-2 py-[5px] font-mono text-[12.5px] scrollbar-none">
         <button
           onClick={() => onNavigate("/")}
-          className="flex items-center rounded px-1 text-text-tertiary transition-colors cursor-pointer hover:bg-hover hover:text-accent"
+          className="flex shrink-0 items-center rounded px-1 text-text-tertiary transition-colors cursor-pointer hover:bg-hover hover:text-accent"
         >
           <House size={13} weight="bold" />
         </button>
         {crumbs.slice(1).map((crumb, i) => (
-          <span key={crumb.path} className="flex items-center">
+          <span key={crumb.path} className="flex shrink-0 items-center">
             <CaretRight size={10} className="mx-0.5 text-text-quaternary" />
             <button
               onClick={() => onNavigate(crumb.path)}
               className={cn(
-                "rounded px-1 py-px transition-colors cursor-pointer hover:bg-hover hover:text-accent",
+                "whitespace-nowrap rounded px-1 py-px transition-colors cursor-pointer hover:bg-hover hover:text-accent",
                 i === crumbs.length - 2
                   ? "text-text-primary"
                   : "text-text-tertiary"
@@ -78,7 +88,7 @@ export default function PathBar({
       </div>
 
       {/* View toggle */}
-      <div className="flex items-center rounded border border-border">
+      <div className="flex shrink-0 items-center rounded border border-border">
         <button
           onClick={() => onToggleView("grid")}
           className={cn(

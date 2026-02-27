@@ -118,7 +118,7 @@ export default function FileGrid({ items, onOpen, viewMode = "grid" }) {
   }
 
   return (
-    <div className="grid grid-cols-2 gap-px p-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+    <div className="grid grid-cols-3 gap-px p-3 sm:p-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
       {sorted.map((item) => (
         <GridCard key={item.id} item={item} onOpen={onOpen} />
       ))}
