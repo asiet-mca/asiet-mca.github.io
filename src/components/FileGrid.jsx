@@ -15,16 +15,20 @@ function GridCard({ item, onOpen }) {
       )}
     >
       <div className="flex h-10 w-10 items-center justify-center sm:h-12 sm:w-12">
-        {isFolder ? (
-          <FolderIcon name={item.name} size={28} className="sm:hidden" weight="duotone" />
-        ) : (
-          <TypeFileIcon name={item.name} size={24} className="sm:hidden" />
-        )}
-        {isFolder ? (
-          <FolderIcon name={item.name} size={32} className="hidden sm:block" weight="duotone" />
-        ) : (
-          <TypeFileIcon name={item.name} size={28} className="hidden sm:block" />
-        )}
+        <span className="sm:hidden">
+          {isFolder ? (
+            <FolderIcon name={item.name} size={28} weight="duotone" />
+          ) : (
+            <TypeFileIcon name={item.name} size={24} />
+          )}
+        </span>
+        <span className="hidden sm:block">
+          {isFolder ? (
+            <FolderIcon name={item.name} size={32} weight="duotone" />
+          ) : (
+            <TypeFileIcon name={item.name} size={28} />
+          )}
+        </span>
       </div>
       <div className="w-full min-w-0">
         <p className={cn(
