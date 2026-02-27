@@ -96,8 +96,8 @@ export default function Explorer() {
 
         {/* Content header */}
         {currentNode && currentPath !== "/" && (
-          <div className="flex items-baseline gap-3 bg-bg px-4 pt-4 pb-2 sm:px-5">
-            <h2 className="font-display text-lg font-semibold text-text-primary">
+          <div className="flex items-baseline gap-2 bg-bg px-3 pt-3 pb-1.5 sm:gap-3 sm:px-5 sm:pt-4 sm:pb-2">
+            <h2 className="font-display text-base font-semibold text-text-primary sm:text-lg">
               {currentNode.name}
             </h2>
             <span className="text-[12px] text-text-quaternary">
@@ -116,8 +116,8 @@ export default function Explorer() {
           />
         </main>
 
-        {/* Status bar */}
-        <div className="flex h-7 shrink-0 items-center justify-between border-t border-border bg-surface px-4 font-mono text-[11px] text-text-quaternary">
+        {/* Status bar — hidden on mobile */}
+        <div className="hidden h-7 shrink-0 items-center justify-between border-t border-border bg-surface px-4 font-mono text-[11px] text-text-quaternary sm:flex">
           <span>{(currentNode?.children?.length || 0)} items</span>
           <span className="truncate ml-2">{currentPath}</span>
         </div>

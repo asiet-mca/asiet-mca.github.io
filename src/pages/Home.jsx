@@ -63,21 +63,21 @@ export default function Home() {
     <div className="min-h-screen bg-bg">
       {/* ─── Top bar ─── */}
       <header className="border-b border-border bg-surface">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-2.5">
-          <div className="flex items-center gap-3">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-2.5 sm:px-6">
+          <div className="flex items-center gap-2 sm:gap-3">
             <img
               src="/images/logos/asiet-logo.png"
               alt="ASIET"
-              className="h-7 w-auto"
+              className="h-6 w-auto sm:h-7"
             />
             <div className="h-4 w-px bg-border" />
-            <span className="text-[12px] font-medium tracking-wide text-accent uppercase">
+            <span className="text-[11px] font-medium tracking-wide text-accent uppercase sm:text-[12px]">
               MCA
             </span>
           </div>
           <button
             onClick={() => navigate("/explorer")}
-            className="flex items-center gap-1.5 rounded-md bg-accent px-3.5 py-1.5 text-[12px] font-medium text-white transition-colors hover:bg-accent-light"
+            className="flex items-center gap-1.5 rounded-md bg-accent px-3 py-1.5 text-[11px] font-medium text-white transition-colors hover:bg-accent-light sm:px-3.5 sm:text-[12px]"
           >
             <FolderSimple size={14} weight="duotone" />
             File Explorer
@@ -93,35 +93,35 @@ export default function Home() {
             alt="ASIET Campus Life"
             className="h-full w-full object-cover object-[center_20%]"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0C4A6E]/90 via-[#0C4A6E]/75 to-[#0C4A6E]/40" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0C4A6E]/92 via-[#0C4A6E]/75 to-[#0C4A6E]/50 sm:bg-gradient-to-r sm:from-[#0C4A6E]/90 sm:via-[#0C4A6E]/75 sm:to-[#0C4A6E]/40" />
         </div>
-        <div className="relative mx-auto max-w-5xl px-6 pt-20 pb-18">
+        <div className="relative mx-auto max-w-5xl px-4 pt-10 pb-8 sm:px-6 sm:pt-20 sm:pb-18">
           <p
-            className="animate-fade-up text-[11px] font-medium tracking-[0.15em] text-sky-200 uppercase"
+            className="animate-fade-up text-[10px] font-medium tracking-[0.15em] text-sky-200 uppercase sm:text-[11px]"
             style={{ animationDelay: "0ms" }}
           >
             Department of Computer Applications
           </p>
           <h1
-            className="animate-fade-up mt-4 max-w-xl font-display text-[2.75rem] font-medium leading-[1.15] tracking-tight text-white"
+            className="animate-fade-up mt-3 max-w-xl font-display text-[1.75rem] font-medium leading-[1.2] tracking-tight text-white sm:mt-4 sm:text-[2.75rem] sm:leading-[1.15]"
             style={{ animationDelay: "80ms" }}
           >
             Master of Computer Applications
           </h1>
           <p
-            className="animate-fade-up mt-5 max-w-lg text-[15px] leading-relaxed text-sky-100/80"
+            className="animate-fade-up mt-3 max-w-lg text-[13px] leading-relaxed text-sky-100/80 sm:mt-5 sm:text-[15px]"
             style={{ animationDelay: "160ms" }}
           >
             Nurturing globally competent computing professionals with innovation,
             research, entrepreneurship skills and social commitment.
           </p>
           <div
-            className="animate-fade-up mt-8 flex flex-wrap items-center gap-3"
+            className="animate-fade-up mt-5 flex flex-wrap items-center gap-2.5 sm:mt-8 sm:gap-3"
             style={{ animationDelay: "240ms" }}
           >
             <button
               onClick={() => navigate("/explorer")}
-              className="group flex items-center gap-2 rounded-lg bg-white px-5 py-2.5 text-[13px] font-medium text-accent transition-colors hover:bg-sky-50"
+              className="group flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-[12px] font-medium text-accent transition-colors hover:bg-sky-50 sm:px-5 sm:py-2.5 sm:text-[13px]"
             >
               Browse Course Materials
               <ArrowRight
@@ -134,7 +134,7 @@ export default function Home() {
               href="https://www.adishankara.ac.in/department/computer-applications"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 rounded-lg border border-white/30 px-5 py-2.5 text-[13px] font-medium text-white/90 transition-colors hover:border-white/60 hover:text-white"
+              className="flex items-center gap-1.5 rounded-lg border border-white/30 px-4 py-2 text-[12px] font-medium text-white/90 transition-colors hover:border-white/60 hover:text-white sm:px-5 sm:py-2.5 sm:text-[13px]"
             >
               Department Website
               <ArrowUpRight size={13} weight="bold" />
@@ -143,15 +143,15 @@ export default function Home() {
 
           {/* Stats row */}
           <div
-            className="animate-fade-up mt-14 flex gap-10"
+            className="animate-fade-up mt-8 grid grid-cols-4 gap-3 sm:mt-14 sm:flex sm:gap-10"
             style={{ animationDelay: "320ms" }}
           >
             {stats.map((s) => (
               <div key={s.label}>
-                <div className="font-display text-2xl font-semibold text-white">
+                <div className="font-display text-xl font-semibold text-white sm:text-2xl">
                   {s.value}
                 </div>
-                <div className="text-[12px] text-sky-200/70">{s.label}</div>
+                <div className="text-[10px] text-sky-200/70 sm:text-[12px]">{s.label}</div>
               </div>
             ))}
           </div>
@@ -160,12 +160,29 @@ export default function Home() {
 
       {/* ─── Faculty ─── */}
       <section className="border-b border-border bg-surface">
-        <div className="mx-auto max-w-5xl px-6 py-12">
+        <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12">
           <div className="flex items-center gap-2 text-[11px] font-medium tracking-[0.12em] text-text-tertiary uppercase">
             <Users size={13} weight="duotone" className="text-accent" />
             Our Faculty
           </div>
-          <div className="mt-7 grid grid-cols-2 gap-5 sm:grid-cols-3">
+          {/* Mobile: compact horizontal rows */}
+          <div className="mt-5 space-y-2.5 sm:hidden">
+            {faculty.map((f) => (
+              <div key={f.name} className="flex items-center gap-3 rounded-lg border border-border bg-bg px-3 py-2.5">
+                <img
+                  src={f.img}
+                  alt={f.name}
+                  className="h-11 w-11 shrink-0 rounded-full object-cover ring-1 ring-border"
+                />
+                <div className="min-w-0">
+                  <div className="text-[13px] font-medium text-text-primary">{f.name}</div>
+                  <div className="text-[11px] text-text-tertiary">{f.role}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* Desktop: card grid */}
+          <div className="mt-7 hidden gap-5 sm:grid sm:grid-cols-3">
             {faculty.map((f) => (
               <div
                 key={f.name}
@@ -192,23 +209,23 @@ export default function Home() {
       <section className="border-b border-border">
         <div className="mx-auto grid max-w-5xl gap-0 md:grid-cols-[1fr_1px_1fr]">
           {/* Research */}
-          <div className="px-6 py-10">
+          <div className="px-4 py-8 sm:px-6 sm:py-10">
             <div className="flex items-center gap-2 text-[11px] font-medium tracking-[0.12em] text-text-tertiary uppercase">
               <Flask size={13} weight="duotone" className="text-accent" />
               Research Focus
             </div>
-            <ul className="mt-5 space-y-2.5">
+            <ul className="mt-4 space-y-2 sm:mt-5 sm:space-y-2.5">
               {researchAreas.map((area) => (
                 <li
                   key={area}
-                  className="flex items-start gap-2 text-[13.5px] text-text-secondary"
+                  className="flex items-start gap-2 text-[13px] text-text-secondary sm:text-[13.5px]"
                 >
                   <span className="mt-[7px] block h-[3px] w-[3px] shrink-0 rounded-full bg-text-quaternary" />
                   {area}
                 </li>
               ))}
             </ul>
-            <div className="mt-6 text-[12px] text-text-tertiary">
+            <div className="mt-4 text-[11px] text-text-tertiary sm:mt-6 sm:text-[12px]">
               Labs: Multimedia Lab, Data Analytics Lab, Bioinformatics Lab
             </div>
           </div>
@@ -217,19 +234,19 @@ export default function Home() {
           <div className="hidden bg-border md:block" />
 
           {/* Recent activities */}
-          <div className="border-t border-border px-6 py-10 md:border-t-0">
+          <div className="border-t border-border px-4 py-8 sm:px-6 sm:py-10 md:border-t-0">
             <div className="flex items-center gap-2 text-[11px] font-medium tracking-[0.12em] text-text-tertiary uppercase">
               <BookOpenText size={13} weight="duotone" className="text-accent" />
               Recent Activities
             </div>
-            <div className="mt-5 space-y-0">
+            <div className="mt-4 space-y-0 sm:mt-5">
               {recentActivity.map((a, i) => (
                 <div
                   key={i}
-                  className="flex items-center justify-between border-b border-border-subtle py-2.5 last:border-0"
+                  className="flex items-center justify-between border-b border-border-subtle py-2 last:border-0 sm:py-2.5"
                 >
                   <span className="text-[13px] text-text-secondary">{a.label}</span>
-                  <span className="font-mono text-[11px] text-text-quaternary">
+                  <span className="ml-3 shrink-0 font-mono text-[10px] text-text-quaternary sm:text-[11px]">
                     {a.date}
                   </span>
                 </div>
@@ -241,17 +258,17 @@ export default function Home() {
 
       {/* ─── Highlights ─── */}
       <section className="border-b border-border bg-surface">
-        <div className="mx-auto max-w-5xl px-6 py-10">
+        <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
           <div className="flex items-center gap-2 text-[11px] font-medium tracking-[0.12em] text-text-tertiary uppercase">
             <Certificate size={13} weight="duotone" className="text-accent" />
             Highlights
           </div>
-          <div className="mt-6 grid gap-6 md:grid-cols-3">
+          <div className="mt-5 grid gap-5 sm:mt-6 sm:gap-6 md:grid-cols-3">
             <div>
               <div className="text-[12px] font-medium text-text-primary">
                 Professional Societies
               </div>
-              <div className="mt-2 flex flex-wrap items-center gap-2">
+              <div className="mt-2 flex flex-wrap items-center gap-1.5 sm:gap-2">
                 {[
                   { name: "ACM Student Chapter", logo: "/images/logos/acm.jpg" },
                   { name: "IEEE Computer Society", logo: "/images/logos/ieee.jpg" },
@@ -259,7 +276,7 @@ export default function Home() {
                 ].map((s) => (
                   <span
                     key={s.name}
-                    className="flex items-center gap-1.5 rounded border border-border bg-bg px-2 py-1 text-[11px] text-text-secondary"
+                    className="flex items-center gap-1.5 rounded border border-border bg-bg px-2 py-1 text-[10px] text-text-secondary sm:text-[11px]"
                   >
                     <img src={s.logo} alt={s.name} className="h-4 w-4 rounded-sm object-contain" />
                     {s.name}
@@ -272,13 +289,13 @@ export default function Home() {
                 Patents Filed
               </div>
               <ul className="mt-2 space-y-1.5">
-                <li className="text-[12.5px] leading-snug text-text-secondary">
+                <li className="text-[12px] leading-snug text-text-secondary sm:text-[12.5px]">
                   AI/IoT-based automated irrigation system
                 </li>
-                <li className="text-[12.5px] leading-snug text-text-secondary">
+                <li className="text-[12px] leading-snug text-text-secondary sm:text-[12.5px]">
                   Handheld caprine/bovine eye imaging device
                 </li>
-                <li className="text-[12.5px] leading-snug text-text-secondary">
+                <li className="text-[12px] leading-snug text-text-secondary sm:text-[12.5px]">
                   AI/IoT automatic metastasis risk prediction
                 </li>
               </ul>
@@ -287,7 +304,7 @@ export default function Home() {
               <div className="text-[12px] font-medium text-text-primary">
                 Newsletter
               </div>
-              <p className="mt-2 text-[12.5px] text-text-secondary">
+              <p className="mt-2 text-[12px] text-text-secondary sm:text-[12.5px]">
                 SANGANANI (2024–25) — monthly department newsletter documenting
                 activities and achievements.
               </p>
@@ -298,20 +315,21 @@ export default function Home() {
 
       {/* ─── Gallery ─── */}
       <section className="border-b border-border">
-        <div className="mx-auto max-w-5xl px-6 py-10">
+        <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
           <div className="flex items-center gap-2 text-[11px] font-medium tracking-[0.12em] text-text-tertiary uppercase">
             <Images size={13} weight="duotone" className="text-accent" />
             Department Gallery
           </div>
-          <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {/* Mobile: horizontal scroll, Desktop: 3-col grid */}
+          <div className="mt-4 -mx-4 flex gap-3 overflow-x-auto px-4 pb-2 scrollbar-none sm:mx-0 sm:mt-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:overflow-visible sm:px-0 sm:pb-0">
             {galleryImages.map((img) => (
-              <div key={img.alt} className="group overflow-hidden rounded-lg border border-border">
+              <div key={img.alt} className="group w-60 shrink-0 overflow-hidden rounded-lg border border-border sm:w-auto">
                 <img
                   src={img.src}
                   alt={img.alt}
                   className="aspect-[4/3] w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
-                <div className="bg-surface px-3 py-2 text-[12px] text-text-tertiary">
+                <div className="bg-surface px-3 py-2 text-[11px] text-text-tertiary sm:text-[12px]">
                   {img.alt}
                 </div>
               </div>
@@ -322,11 +340,11 @@ export default function Home() {
 
       {/* ─── Mission ─── */}
       <section className="border-b border-border bg-surface">
-        <div className="mx-auto max-w-5xl px-6 py-10">
+        <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
           <div className="text-[11px] font-medium tracking-[0.12em] text-text-tertiary uppercase">
             Mission
           </div>
-          <div className="mt-4 grid gap-4 md:grid-cols-3">
+          <div className="mt-3 grid gap-3 sm:mt-4 sm:gap-4 md:grid-cols-3">
             {[
               "Quality education with industry collaboration and teaching excellence.",
               "Academic environment fostering research, innovation, and entrepreneurship.",
@@ -334,7 +352,7 @@ export default function Home() {
             ].map((m, i) => (
               <p
                 key={i}
-                className="font-display text-[15px] leading-relaxed text-text-secondary italic"
+                className="font-display text-[14px] leading-relaxed text-text-secondary italic sm:text-[15px]"
               >
                 {m}
               </p>
@@ -345,44 +363,44 @@ export default function Home() {
 
       {/* ─── Footer ─── */}
       <footer className="bg-surface border-t border-border">
-        <div className="mx-auto max-w-5xl px-6 py-8">
-          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-start">
+        <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8">
+          <div className="flex flex-col justify-between gap-5 sm:gap-6 md:flex-row md:items-start">
             <div className="flex items-center gap-3">
               <img
                 src="/logo.png"
                 alt="ASIET"
-                className="h-9 w-9 object-contain md:hidden"
+                className="h-9 w-9 shrink-0 object-contain md:hidden"
               />
               <img
                 src="/images/logos/asiet-footer-logo.png"
                 alt="ASIET"
                 className="hidden h-10 w-auto opacity-80 md:block"
               />
-              <div>
+              <div className="min-w-0">
                 <div className="font-display text-[13px] font-semibold text-text-primary">
                   Adi Shankara Institute of Engineering & Technology
                 </div>
-                <div className="mt-1 text-[12px] text-text-tertiary">
+                <div className="mt-0.5 text-[11px] text-text-tertiary sm:mt-1 sm:text-[12px]">
                   Department of Computer Applications (MCA)
                 </div>
               </div>
             </div>
-            <div className="flex flex-col gap-2 text-[12px] text-text-tertiary md:items-end">
+            <div className="flex flex-col gap-1.5 text-[11px] text-text-tertiary sm:gap-2 sm:text-[12px] md:items-end">
               <div className="flex items-center gap-1.5">
-                <MapPin size={12} weight="bold" className="text-text-quaternary" />
+                <MapPin size={12} weight="bold" className="shrink-0 text-text-quaternary" />
                 Vidya Bharathi Nagar, Kalady, Ernakulam, Kerala 683574
               </div>
               <div className="flex items-center gap-1.5">
-                <Phone size={12} weight="bold" className="text-text-quaternary" />
+                <Phone size={12} weight="bold" className="shrink-0 text-text-quaternary" />
                 0484-2463825
               </div>
               <div className="flex items-center gap-1.5">
-                <EnvelopeSimple size={12} weight="bold" className="text-text-quaternary" />
+                <EnvelopeSimple size={12} weight="bold" className="shrink-0 text-text-quaternary" />
                 info@adishankara.ac.in
               </div>
             </div>
           </div>
-          <div className="mt-6 border-t border-border-subtle pt-4 text-[11px] text-text-quaternary">
+          <div className="mt-5 border-t border-border-subtle pt-3 text-[10px] text-text-quaternary sm:mt-6 sm:pt-4 sm:text-[11px]">
             Course Materials Repository — Built for ASIET MCA students
           </div>
         </div>
