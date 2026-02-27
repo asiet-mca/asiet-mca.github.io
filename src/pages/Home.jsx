@@ -349,9 +349,14 @@ export default function Home() {
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-start">
             <div className="flex items-center gap-3">
               <img
+                src="/logo.png"
+                alt="ASIET"
+                className="h-9 w-9 object-contain md:hidden"
+              />
+              <img
                 src="/images/logos/asiet-footer-logo.png"
                 alt="ASIET"
-                className="h-10 w-auto opacity-80"
+                className="hidden h-10 w-auto opacity-80 md:block"
               />
               <div>
                 <div className="font-display text-[13px] font-semibold text-text-primary">
