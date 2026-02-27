@@ -169,12 +169,12 @@ export default function Home() {
             {faculty.map((f) => (
               <div
                 key={f.name}
-                className="group rounded-xl border border-border bg-bg p-4 text-center transition-all hover:border-accent/20 hover:shadow-sm"
+                className="group rounded-xl border border-border bg-bg p-4 text-center hover:border-accent/20 hover:shadow-sm"
               >
                 <img
                   src={f.img}
                   alt={f.name}
-                  className="mx-auto h-24 w-24 rounded-full object-cover ring-2 ring-border transition-all group-hover:ring-accent/30"
+                  className="mx-auto h-24 w-24 rounded-full object-cover ring-2 ring-border group-hover:ring-accent/30"
                 />
                 <div className="mt-3.5 text-[14px] font-medium text-text-primary">
                   {f.name}
