@@ -1,16 +1,46 @@
-# React + Vite
+# ASIET MCA Course Materials Repository
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web-based file explorer and course materials repository for the **Master of Computer Applications (MCA)** program at **Adi Shankara Institute of Engineering & Technology (ASIET)**, Kalady, India.
 
-Currently, two official plugins are available:
+**Live site:** [asiet-mca.github.io](https://asiet-mca.github.io)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## React Compiler
+- **File Explorer** — Browse course materials (notes, assignments, question papers, lab records) across all 4 semesters with grid/list views, breadcrumb navigation, and a collapsible folder tree sidebar
+- **Department Home Page** — Landing page with faculty profiles, research areas, recent activities, achievements, and department gallery
+- **Mobile Responsive** — Fully responsive design with mobile sidebar overlay, scrollable breadcrumbs, and adaptive grid layouts
+- **SEO Optimized** — Open Graph tags, structured data, sitemap, and robots.txt
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+- **React 19** with React Router 7
+- **Tailwind CSS 4** for styling
+- **Vite 7** for builds and dev server
+- **Phosphor Icons** + **Lucide React** for iconography
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Getting Started
+
+```bash
+# Install dependencies
+npm install
+
+# Start dev server
+npm run dev
+
+# Build for production
+npm run build
+```
+
+## Project Structure
+
+```
+src/
+├── pages/          # Home and Explorer pages
+├── components/     # FileGrid, Sidebar, FolderTree, PathBar, FileIcon
+├── data/           # Course material file system structure
+└── index.css       # Tailwind config and custom theme
+```
+
+## License
+
+This project is maintained by the ASIET MCA department.
