@@ -135,7 +135,7 @@ export default function FileGrid({ items, onOpen, viewMode = "grid" }: FileGridP
           <span className="w-14 text-right sm:w-16">Size</span>
         </div>
         {sorted.map((item) => (
-          <ListRow key={item.id} item={item} onOpen={onOpen} />
+          <ListRow key={item.name} item={item} onOpen={onOpen} />
         ))}
       </div>
     );
@@ -144,7 +144,7 @@ export default function FileGrid({ items, onOpen, viewMode = "grid" }: FileGridP
   return (
     <div className="grid grid-cols-3 gap-px p-2 sm:p-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
       {sorted.map((item) => (
-        <GridCard key={item.id} item={item} onOpen={onOpen} />
+        <GridCard key={item.name} item={item} onOpen={onOpen} />
       ))}
     </div>
   );

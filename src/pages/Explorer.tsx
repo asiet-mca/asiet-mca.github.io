@@ -117,7 +117,7 @@ export default function Explorer() {
           </div>
         )}
 
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto" key={currentPath}>
           {isLoading ? (
             <div className="flex flex-1 flex-col items-center justify-center gap-3 py-24">
               <SpinnerGap
