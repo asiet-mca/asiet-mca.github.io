@@ -1078,10 +1078,18 @@ export default function Admin() {
     async (
       path: string,
       check: (items: GitHubContent[]) => boolean,
-      trackName?: string
+      trackNames?: string | string[]
     ) => {
       if (!github) return;
-      if (trackName) setSyncingNames((s) => new Set(s).add(trackName));
+      const names = trackNames
+        ? Array.isArray(trackNames) ? trackNames : [trackNames]
+        : [];
+      if (names.length > 0)
+        setSyncingNames((s) => {
+          const next = new Set(s);
+          names.forEach((n) => next.add(n));
+          return next;
+        });
       const maxAttempts = 20;
       let synced = false;
       for (let i = 0; i < maxAttempts; i++) {
@@ -1102,10 +1110,10 @@ export default function Admin() {
       if (!synced) {
         queryClient.invalidateQueries({ queryKey: ["contents", path] });
       }
-      if (trackName)
+      if (names.length > 0)
         setSyncingNames((s) => {
           const next = new Set(s);
-          next.delete(trackName);
+          names.forEach((n) => next.delete(n));
           return next;
         });
     },
@@ -1152,7 +1160,8 @@ export default function Admin() {
       if (names.length > 0) {
         pollForSync(
           currentPath,
-          (items) => names.every((n) => items.some((i) => i.name === n))
+          (items) => names.every((n) => items.some((i) => i.name === n)),
+          names
         );
       }
     },
@@ -1714,7 +1723,11 @@ export default function Admin() {
                           <FileText
                             size={32}
                             weight="duotone"
-                            className={fileColor(item.name)}
+                            className={
+                              syncingNames.has(item.name)
+                                ? "animate-pulse opacity-50"
+                                : fileColor(item.name)
+                            }
                           />
                         )}
                         {syncingNames.has(item.name) && (
@@ -1728,11 +1741,11 @@ export default function Admin() {
                         {item.name}
                       </span>
                       <span className="mt-0.5 text-[10px] text-stone-400">
-                        {item.type === "dir"
-                          ? syncingNames.has(item.name)
-                            ? "Syncing..."
-                            : "Folder"
-                          : fmtSize(item.size)}
+                        {syncingNames.has(item.name)
+                          ? "Syncing..."
+                          : item.type === "dir"
+                            ? "Folder"
+                            : fmtSize(item.size)}
                       </span>
                     </button>
 
