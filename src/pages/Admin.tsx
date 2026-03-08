@@ -1084,15 +1084,24 @@ export default function Admin() {
       if (trackName) setSyncingNames((s) => new Set(s).add(trackName));
       const maxAttempts = 8;
       const intervalMs = 2000;
+      let synced = false;
       for (let i = 0; i < maxAttempts; i++) {
         await new Promise((r) => setTimeout(r, intervalMs));
         try {
           const items = await github.list(path);
-          queryClient.setQueryData(["contents", path], items);
-          if (check(items)) break;
+          if (check(items)) {
+            // Only replace cache once the expected change is confirmed
+            queryClient.setQueryData(["contents", path], items);
+            synced = true;
+            break;
+          }
         } catch {
           // retry
         }
+      }
+      // If polling exhausted without confirmation, refresh anyway
+      if (!synced) {
+        queryClient.invalidateQueries({ queryKey: ["contents", path] });
       }
       if (trackName)
         setSyncingNames((s) => {
