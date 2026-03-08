@@ -20,7 +20,8 @@ function TreeNode({ node, currentPath, onNavigate, depth = 0 }: TreeNodeProps) {
     if (isAncestor && !expanded) setExpanded(true);
   }, [currentPath]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const hasChildren = node.children?.some((c) => c.type === "folder");
+  // Show expand arrow for folders with sub-folders, or folders not yet loaded
+  const hasChildren = !node.children || node.children.some((c) => c.type === "folder");
   const folderChildren = node.children?.filter((c) => c.type === "folder") || [];
 
   const handleClick = () => {
