@@ -65,11 +65,13 @@ export default function Home() {
       <Helmet>
         <title>ASIET MCA — Department of Computer Applications | Adi Shankara Institute</title>
         <meta name="description" content="Official course materials portal for the Department of Computer Applications (MCA) at Adi Shankara Institute of Engineering & Technology (ASIET), Kalady, Kerala. Access notes, assignments, question papers, and lab records." />
-        <meta name="keywords" content="ASIET MCA, ASIET, Adi Shankara MCA, ASIET Kalady MCA, ASIET MCA department, ASIET MCA course materials, MCA Kalady, Adi Shankara Institute MCA, ASIET computer applications, MCA Kerala" />
+        <meta name="keywords" content="ASIET MCA, ASIET, Adi Shankara MCA, ASIET Kalady MCA, ASIET MCA department, ASIET MCA course materials, MCA Kalady, Adi Shankara Institute MCA, ASIET computer applications, MCA Kerala, ASIET MCA notes, ASIET MCA question papers" />
         <link rel="canonical" href="https://asiet-mca.github.io/" />
-        <meta property="og:title" content="ASIET MCA — Department of Computer Applications" />
-        <meta property="og:description" content="Browse notes, assignments, question papers & lab records for the MCA programme at ASIET, Kalady." />
+        <meta property="og:title" content="ASIET MCA — Department of Computer Applications | Adi Shankara Institute" />
+        <meta property="og:description" content="Official course materials portal — notes, assignments, question papers & lab records for the MCA programme at ASIET, Kalady, Kerala." />
         <meta property="og:url" content="https://asiet-mca.github.io/" />
+        <meta name="twitter:title" content="ASIET MCA — Department of Computer Applications | Adi Shankara Institute" />
+        <meta name="twitter:description" content="Official course materials portal — notes, assignments, question papers & lab records for the MCA programme at ASIET, Kalady, Kerala." />
       </Helmet>
 
       {/* ─── Top bar ─── */}
