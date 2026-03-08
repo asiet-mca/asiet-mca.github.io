@@ -1154,6 +1154,49 @@ export default function Admin() {
       }
       return { total: files.length, failed, uploaded };
     },
+    onMutate: async (files) => {
+      await queryClient.cancelQueries({
+        queryKey: ["contents", currentPath],
+      });
+      const prev = queryClient.getQueryData<GitHubContent[]>([
+        "contents",
+        currentPath,
+      ]);
+      // Add synthetic file entries so they appear with the syncing animation
+      const synthetics: GitHubContent[] = Array.from(files).map((f) => ({
+        name: f.name,
+        path: `${config!.basePath}/${currentPath ? currentPath + "/" : ""}${f.name}`,
+        sha: `pending-${Date.now()}-${f.name}`,
+        size: f.size,
+        type: "file" as const,
+        download_url: null,
+        html_url: "",
+      }));
+      const names = new Set(synthetics.map((s) => s.name));
+      queryClient.setQueryData<GitHubContent[]>(
+        ["contents", currentPath],
+        (old) =>
+          [...(old ?? []).filter((i) => !names.has(i.name)), ...synthetics].sort(
+            (a, b) =>
+              a.type !== b.type
+                ? a.type === "dir"
+                  ? -1
+                  : 1
+                : a.name.localeCompare(b.name)
+          )
+      );
+      // Mark as syncing immediately
+      setSyncingNames((s) => {
+        const next = new Set(s);
+        synthetics.forEach((f) => next.add(f.name));
+        return next;
+      });
+      return { prev };
+    },
+    onError: (_err, _files, ctx) => {
+      if (ctx?.prev)
+        queryClient.setQueryData(["contents", currentPath], ctx.prev);
+    },
     onSettled: (_data, _err) => {
       setUploadMsg("");
       const names = _data?.uploaded ?? [];
@@ -1163,6 +1206,10 @@ export default function Admin() {
           (items) => names.every((n) => items.some((i) => i.name === n)),
           names
         );
+      } else {
+        // All failed — clear syncing state
+        setSyncingNames(new Set());
+        queryClient.invalidateQueries({ queryKey: ["contents", currentPath] });
       }
     },
     onSuccess: ({ total, failed }) => {
