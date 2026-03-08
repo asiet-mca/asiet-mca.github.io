@@ -1038,6 +1038,7 @@ export default function Admin() {
   const [showOnboarding, setShowOnboarding] = useState(
     () => !localStorage.getItem(ONBOARDING_KEY)
   );
+  const [syncingNames, setSyncingNames] = useState<Set<string>>(new Set());
 
   /* ── Toast helper ── */
   const toast = useCallback(
@@ -1071,6 +1072,37 @@ export default function Admin() {
       setGithub(null);
     }
   }, [config]);
+
+  /* ── Poll helper: retry with gaps until change appears ── */
+  const pollForSync = useCallback(
+    async (
+      path: string,
+      check: (items: GitHubContent[]) => boolean,
+      trackName?: string
+    ) => {
+      if (!github) return;
+      if (trackName) setSyncingNames((s) => new Set(s).add(trackName));
+      const maxAttempts = 8;
+      const intervalMs = 2000;
+      for (let i = 0; i < maxAttempts; i++) {
+        await new Promise((r) => setTimeout(r, intervalMs));
+        try {
+          const items = await github.list(path);
+          queryClient.setQueryData(["contents", path], items);
+          if (check(items)) break;
+        } catch {
+          // retry
+        }
+      }
+      if (trackName)
+        setSyncingNames((s) => {
+          const next = new Set(s);
+          next.delete(trackName);
+          return next;
+        });
+    },
+    [github, queryClient]
+  );
 
   /* ── React Query: directory listing ── */
   const {
@@ -1106,9 +1138,7 @@ export default function Admin() {
     },
     onSettled: () => {
       setUploadMsg("");
-      setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ["contents"] });
-      }, 2000);
+      queryClient.invalidateQueries({ queryKey: ["contents"] });
     },
     onSuccess: ({ total, failed }) => {
       const succeeded = total - failed;
@@ -1163,11 +1193,12 @@ export default function Admin() {
         queryClient.setQueryData(["contents", currentPath], ctx.prev);
       toast(err.message || "Failed to create folder", "error");
     },
-    onSettled: () => {
-      // Delay refetch to give GitHub API time to propagate
-      setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ["contents"] });
-      }, 2000);
+    onSettled: (_data, _err, name) => {
+      pollForSync(
+        currentPath,
+        (items) => items.some((i) => i.name === name && i.sha && !i.sha.startsWith("pending-")),
+        name
+      );
     },
     onSuccess: (name) => {
       toast(`Created folder "${name}"`, "success");
@@ -1203,10 +1234,11 @@ export default function Admin() {
         queryClient.setQueryData(["contents", currentPath], ctx.prev);
       toast(err.message || "Failed to delete", "error");
     },
-    onSettled: () => {
-      setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ["contents"] });
-      }, 2000);
+    onSettled: (_data, _err, item) => {
+      pollForSync(
+        currentPath,
+        (items) => !items.some((i) => i.name === item.name)
+      );
     },
     onSuccess: (item) => {
       toast(`Deleted "${item.name}"`, "success");
@@ -1233,9 +1265,7 @@ export default function Admin() {
     },
     onSettled: () => {
       setSeedProgress("");
-      setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ["contents"] });
-      }, 2000);
+      pollForSync(currentPath, (items) => items.length > 0);
     },
     onSuccess: () => {
       toast("Course structure created successfully", "success");
@@ -1648,24 +1678,40 @@ export default function Admin() {
                       }
                       className="flex w-full flex-col items-center px-3 pt-4 pb-2 text-center"
                     >
-                      {item.type === "dir" ? (
-                        <Folder
-                          size={32}
-                          weight="duotone"
-                          className="text-amber-500"
-                        />
-                      ) : (
-                        <FileText
-                          size={32}
-                          weight="duotone"
-                          className={fileColor(item.name)}
-                        />
-                      )}
+                      <div className="relative">
+                        {item.type === "dir" ? (
+                          <Folder
+                            size={32}
+                            weight="duotone"
+                            className={
+                              syncingNames.has(item.name)
+                                ? "text-amber-300 animate-pulse"
+                                : "text-amber-500"
+                            }
+                          />
+                        ) : (
+                          <FileText
+                            size={32}
+                            weight="duotone"
+                            className={fileColor(item.name)}
+                          />
+                        )}
+                        {syncingNames.has(item.name) && (
+                          <SpinnerGap
+                            size={14}
+                            className="absolute -right-1 -bottom-1 animate-spin text-amber-500"
+                          />
+                        )}
+                      </div>
                       <span className="mt-2 line-clamp-2 w-full break-all text-[12px] font-medium leading-snug text-stone-700">
                         {item.name}
                       </span>
                       <span className="mt-0.5 text-[10px] text-stone-400">
-                        {item.type === "dir" ? "Folder" : fmtSize(item.size)}
+                        {item.type === "dir"
+                          ? syncingNames.has(item.name)
+                            ? "Syncing..."
+                            : "Folder"
+                          : fmtSize(item.size)}
                       </span>
                     </button>
 
