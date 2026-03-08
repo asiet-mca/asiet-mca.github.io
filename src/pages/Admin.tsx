@@ -1469,7 +1469,7 @@ export default function Admin() {
                     </button>
 
                     {/* Hover action buttons */}
-                    <div className="absolute right-2 top-2 flex gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
+                    <div className="absolute right-2 top-2 flex gap-0.5 sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100">
                       {item.type === "file" && (
                         <button
                           onClick={(e) => {
