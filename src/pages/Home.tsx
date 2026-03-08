@@ -16,18 +16,18 @@ import {
 } from "@phosphor-icons/react";
 
 const faculty = [
-  { name: "Dr. Vincy Devi V K", role: "Associate Professor & HOD", img: "/images/faculty/vincy.jpg" },
-  { name: "Dr. Sneha Prakash", role: "Associate Professor", img: "/images/faculty/sneha.jpg" },
-  { name: "Anjali Sankar", role: "Assistant Professor", img: "/images/faculty/anjali.jpg" },
-  { name: "Rintu Augustine", role: "Assistant Professor", img: "/images/faculty/rintu.jpg" },
-  { name: "Sukrith Lal P S", role: "Assistant Professor", img: "/images/faculty/sukrith.jpg" },
-  { name: "Sumathy M V", role: "Lab Instructor", img: "/images/faculty/sumathy.jpg" },
+  { name: "Dr. Vincy Devi V K", role: "Associate Professor & HOD", img: "/images/faculty/vincy.webp" },
+  { name: "Dr. Sneha Prakash", role: "Associate Professor", img: "/images/faculty/sneha.webp" },
+  { name: "Anjali Sankar", role: "Assistant Professor", img: "/images/faculty/anjali.webp" },
+  { name: "Rintu Augustine", role: "Assistant Professor", img: "/images/faculty/rintu.webp" },
+  { name: "Sukrith Lal P S", role: "Assistant Professor", img: "/images/faculty/sukrith.webp" },
+  { name: "Sumathy M V", role: "Lab Instructor", img: "/images/faculty/sumathy.webp" },
 ];
 
 const galleryImages = [
-  { src: "/images/gallery/department.jpeg", alt: "MCA Department" },
-  { src: "/images/gallery/lab.jpg", alt: "Computer Lab" },
-  { src: "/images/gallery/research.jpg", alt: "Research Activities" },
+  { src: "/images/gallery/department.webp", alt: "MCA Department" },
+  { src: "/images/gallery/lab.webp", alt: "Computer Lab" },
+  { src: "/images/gallery/research.webp", alt: "Research Activities" },
 ];
 
 const researchAreas = [
@@ -79,7 +79,7 @@ export default function Home() {
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-2.5 sm:px-6">
           <div className="flex items-center gap-2 sm:gap-3">
             <img
-              src="/images/logos/asiet-logo.png"
+              src="/images/logos/asiet-logo.webp"
               alt="ASIET"
               className="h-6 w-auto sm:h-7"
             />
@@ -111,7 +111,7 @@ export default function Home() {
       <section className="relative border-b border-border overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="/banner15.jpg"
+            src="/banner15.webp"
             alt="ASIET Campus Life"
             decoding="async"
             className="h-full w-full object-cover object-[center_20%]"
@@ -297,9 +297,9 @@ export default function Home() {
               </div>
               <div className="mt-2 flex flex-wrap items-center gap-1.5 sm:gap-2">
                 {[
-                  { name: "ACM Student Chapter", logo: "/images/logos/acm.jpg" },
-                  { name: "IEEE Computer Society", logo: "/images/logos/ieee.jpg" },
-                  { name: "CSI", logo: "/images/logos/csi.jpg" },
+                  { name: "ACM Student Chapter", logo: "/images/logos/acm.webp" },
+                  { name: "IEEE Computer Society", logo: "/images/logos/ieee.webp" },
+                  { name: "CSI", logo: "/images/logos/csi.webp" },
                 ].map((s) => (
                   <span
                     key={s.name}
@@ -396,12 +396,12 @@ export default function Home() {
           <div className="flex flex-col justify-between gap-5 sm:gap-6 md:flex-row md:items-start">
             <div className="flex items-center gap-3">
               <img
-                src="/logo.png"
+                src="/logo.webp"
                 alt="ASIET"
                 className="h-9 w-9 shrink-0 object-contain md:hidden"
               />
               <img
-                src="/images/logos/asiet-footer-logo.png"
+                src="/images/logos/asiet-footer-logo.webp"
                 alt="ASIET"
                 className="hidden h-10 w-auto opacity-80 md:block"
               />
