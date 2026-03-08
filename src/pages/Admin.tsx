@@ -220,6 +220,7 @@ function OnboardingBanner({ onDismiss }: { onDismiss: () => void }) {
           </div>
           <button
             onClick={onDismiss}
+            aria-label="Dismiss"
             className="rounded-md p-1 text-stone-400 transition-colors hover:bg-stone-100 hover:text-stone-600"
           >
             <X size={14} />
@@ -327,6 +328,7 @@ function Toasts({
           </span>
           <button
             onClick={() => onDismiss(t.id)}
+            aria-label="Dismiss notification"
             className="ml-2 shrink-0 text-stone-400 hover:text-stone-600"
           >
             <X size={14} />
@@ -441,7 +443,7 @@ function AuthScreen({ onConnect }: { onConnect: (c: GitHubConfig) => void }) {
         </div>
       </header>
 
-      <div className="flex flex-1 items-center justify-center px-4 py-10">
+      <main className="flex flex-1 items-center justify-center px-4 py-10">
         <div className="w-full max-w-md">
           <div className="overflow-hidden rounded-2xl border border-amber-200/60 bg-white shadow-xl shadow-amber-900/5">
             <div className="h-1 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-400" />
@@ -486,6 +488,7 @@ function AuthScreen({ onConnect }: { onConnect: (c: GitHubConfig) => void }) {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
+                      aria-label={showPassword ? "Hide password" : "Show password"}
                       className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600"
                     >
                       {showPassword ? (
@@ -730,7 +733,7 @@ function AuthScreen({ onConnect }: { onConnect: (c: GitHubConfig) => void }) {
             </div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
@@ -774,6 +777,7 @@ function CreateFolderModal({
           </h3>
           <button
             onClick={onClose}
+            aria-label="Close dialog"
             className="text-stone-400 hover:text-stone-600"
           >
             <X size={16} />
@@ -928,6 +932,7 @@ function SettingsModal({
           </h3>
           <button
             onClick={onClose}
+            aria-label="Close dialog"
             className="text-stone-400 hover:text-stone-600"
           >
             <X size={16} />
@@ -1485,6 +1490,7 @@ export default function Admin() {
             <Tip label="Back to home page" position="bottom">
               <button
                 onClick={() => navigate("/")}
+                aria-label="Home"
                 className="flex items-center gap-1.5 text-[12px] text-stone-500 transition-colors hover:text-stone-700"
               >
                 <House size={14} weight="duotone" />
@@ -1518,6 +1524,7 @@ export default function Admin() {
             <Tip label="Connection settings" position="bottom">
               <button
                 onClick={() => setShowSettings(true)}
+                aria-label="Connection settings"
                 className="rounded-lg p-2 text-stone-400 transition-colors hover:bg-stone-100 hover:text-stone-600"
               >
                 <GearSix size={16} />
@@ -1526,6 +1533,7 @@ export default function Admin() {
             <Tip label="Sign out" position="bottom">
               <button
                 onClick={logout}
+                aria-label="Sign out"
                 className="rounded-lg p-2 text-stone-400 transition-colors hover:bg-red-50 hover:text-red-500"
               >
                 <SignOut size={16} />
@@ -1547,6 +1555,7 @@ export default function Admin() {
           <nav className="scrollbar-none flex items-center gap-1 overflow-x-auto text-[13px]">
             <button
               onClick={() => navigateTo("")}
+              aria-label="Go to root"
               className={`shrink-0 rounded-md px-2 py-1 transition-colors ${
                 !currentPath
                   ? "bg-amber-100 font-medium text-amber-800"
@@ -1829,6 +1838,7 @@ export default function Admin() {
                               e.stopPropagation();
                               handleCopyLink(item);
                             }}
+                            aria-label="Copy download link"
                             className="rounded-md border border-stone-200 bg-white p-1 text-stone-400 shadow-sm transition-colors hover:border-blue-200 hover:text-blue-600"
                           >
                             <Copy size={12} />
@@ -1844,6 +1854,7 @@ export default function Admin() {
                             e.stopPropagation();
                             setDeleteTarget(item);
                           }}
+                          aria-label={`Delete ${item.name}`}
                           className="rounded-md border border-stone-200 bg-white p-1 text-stone-400 shadow-sm transition-colors hover:border-red-200 hover:text-red-500"
                         >
                           <Trash size={12} />

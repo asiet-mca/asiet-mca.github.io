@@ -52,6 +52,7 @@ export default function Sidebar({ tree, currentPath, onNavigate, collapsed, onTo
           {/* Desktop: collapse toggle */}
           <button
             onClick={onToggle}
+            aria-label="Toggle sidebar"
             className="hidden h-7 w-7 items-center justify-center rounded text-text-tertiary transition-colors cursor-pointer hover:bg-hover hover:text-text-secondary md:flex"
           >
             <SidebarSimple size={16} weight="regular" />
@@ -59,6 +60,7 @@ export default function Sidebar({ tree, currentPath, onNavigate, collapsed, onTo
           {/* Mobile: close button */}
           <button
             onClick={onMobileClose}
+            aria-label="Close sidebar"
             className="flex h-7 w-7 items-center justify-center rounded text-text-tertiary transition-colors cursor-pointer hover:bg-hover hover:text-text-secondary md:hidden"
           >
             <X size={16} weight="bold" />
