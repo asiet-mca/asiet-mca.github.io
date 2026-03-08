@@ -1242,12 +1242,11 @@ export default function Admin() {
         queryClient.setQueryData(["contents", currentPath], ctx.prev);
       toast(err.message || "Failed to delete", "error");
     },
-    onSettled: () => {
-      // Soft refresh after a delay — no aggressive polling that could
-      // overwrite the optimistic removal with stale API data
-      setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ["contents", currentPath] });
-      }, 4000);
+    onSettled: (_data, _err, item) => {
+      pollForSync(
+        currentPath,
+        (items) => !items.some((i) => i.name === item.name)
+      );
     },
     onSuccess: (item) => {
       toast(`Deleted "${item.name}"`, "success");
