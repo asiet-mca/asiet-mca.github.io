@@ -1046,8 +1046,10 @@ export default function Admin() {
       } else {
         await github.delete(rel, deleteTarget.sha);
       }
+      setContents((c) => c.filter((i) => i.sha !== deleteTarget.sha));
       toast(`Deleted "${deleteTarget.name}"`, "success");
       setDeleteTarget(null);
+      // Background refetch to reconcile with actual repo state
       loadContents();
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to delete";
