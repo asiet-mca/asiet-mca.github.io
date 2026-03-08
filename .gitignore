@@ -13,6 +13,11 @@ dist-ssr
 *.local
 .claude/
 
+# Environment files (contain encrypted tokens)
+.env
+.env.local
+.env.production
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

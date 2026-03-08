@@ -3,19 +3,20 @@ import Sidebar from "../components/Sidebar";
 import PathBar from "../components/PathBar";
 import FileGrid from "../components/FileGrid";
 import { fileSystem, findNodeByPath } from "../data/fileSystem";
+import type { FileSystemNode } from "../data/fileSystem";
 
 export default function Explorer() {
   const [currentPath, setCurrentPath] = useState("/");
-  const [history, setHistory] = useState(["/"]);
+  const [history, setHistory] = useState<string[]>(["/"]);
   const [historyIndex, setHistoryIndex] = useState(0);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [viewMode, setViewMode] = useState("grid");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   const currentNode = findNodeByPath(currentPath);
 
   const navigateTo = useCallback(
-    (path) => {
+    (path: string) => {
       if (path === currentPath) return;
       const newHistory = [...history.slice(0, historyIndex + 1), path];
       setHistory(newHistory);
@@ -29,7 +30,7 @@ export default function Explorer() {
     if (historyIndex > 0) {
       const newIndex = historyIndex - 1;
       setHistoryIndex(newIndex);
-      setCurrentPath(history[newIndex]);
+      setCurrentPath(history[newIndex]!);
     }
   }, [history, historyIndex]);
 
@@ -37,12 +38,12 @@ export default function Explorer() {
     if (historyIndex < history.length - 1) {
       const newIndex = historyIndex + 1;
       setHistoryIndex(newIndex);
-      setCurrentPath(history[newIndex]);
+      setCurrentPath(history[newIndex]!);
     }
   }, [history, historyIndex]);
 
   const handleOpenItem = useCallback(
-    (item) => {
+    (item: FileSystemNode) => {
       if (item.type === "folder") {
         navigateTo(item.path);
       }
