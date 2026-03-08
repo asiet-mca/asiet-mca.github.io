@@ -57,6 +57,8 @@ export default function Explorer() {
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content="Browse and download MCA course materials from ASIET Kalady." />
         <meta property="og:url" content="https://asiet-mca.github.io/explorer" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content="Browse and download MCA course materials from ASIET Kalady." />
       </Helmet>
 
       {/* Sidebar: hidden on mobile, visible on desktop */}
