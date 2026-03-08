@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { useSearchParams } from "react-router-dom";
 import { SpinnerGap } from "@phosphor-icons/react";
 import Sidebar from "../components/Sidebar";
 import PathBar from "../components/PathBar";
@@ -7,9 +8,9 @@ import { useGitHubExplorer } from "../hooks/useGitHubExplorer";
 import type { FileSystemNode } from "../data/fileSystem";
 
 export default function Explorer() {
-  const [currentPath, setCurrentPath] = useState("/");
-  const [history, setHistory] = useState<string[]>(["/"]);
-  const [historyIndex, setHistoryIndex] = useState(0);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPath = searchParams.get("path") || "/";
+
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -20,29 +21,10 @@ export default function Explorer() {
   const navigateTo = useCallback(
     (path: string) => {
       if (path === currentPath) return;
-      const newHistory = [...history.slice(0, historyIndex + 1), path];
-      setHistory(newHistory);
-      setHistoryIndex(newHistory.length - 1);
-      setCurrentPath(path);
+      setSearchParams(path && path !== "/" ? { path } : {});
     },
-    [currentPath, history, historyIndex]
+    [currentPath, setSearchParams]
   );
-
-  const goBack = useCallback(() => {
-    if (historyIndex > 0) {
-      const newIndex = historyIndex - 1;
-      setHistoryIndex(newIndex);
-      setCurrentPath(history[newIndex]!);
-    }
-  }, [history, historyIndex]);
-
-  const goForward = useCallback(() => {
-    if (historyIndex < history.length - 1) {
-      const newIndex = historyIndex + 1;
-      setHistoryIndex(newIndex);
-      setCurrentPath(history[newIndex]!);
-    }
-  }, [history, historyIndex]);
 
   const handleOpenItem = useCallback(
     (item: FileSystemNode) => {
@@ -92,10 +74,10 @@ export default function Explorer() {
         <PathBar
           currentPath={currentPath}
           onNavigate={navigateTo}
-          canGoBack={historyIndex > 0}
-          canGoForward={historyIndex < history.length - 1}
-          onBack={goBack}
-          onForward={goForward}
+          canGoBack={window.history.length > 1}
+          canGoForward={false}
+          onBack={() => window.history.back()}
+          onForward={() => {}}
           viewMode={viewMode}
           onToggleView={setViewMode}
           onMenuToggle={() => setMobileOpen(true)}
