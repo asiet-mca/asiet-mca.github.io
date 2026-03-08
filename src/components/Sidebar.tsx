@@ -39,7 +39,7 @@ export default function Sidebar({ tree, currentPath, onNavigate, collapsed, onTo
           {!collapsed && (
             <div className="flex items-center gap-2.5">
               <img
-                src="/images/logos/asiet-logo.png"
+                src="/images/logos/asiet-logo.webp"
                 alt="ASIET"
                 className="h-6 w-auto"
               />
