@@ -100,6 +100,7 @@ export default function Home() {
           <img
             src="/banner15.jpg"
             alt="ASIET Campus Life"
+            decoding="async"
             className="h-full w-full object-cover object-[center_20%]"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[#0C4A6E]/92 via-[#0C4A6E]/75 to-[#0C4A6E]/50 sm:bg-gradient-to-r sm:from-[#0C4A6E]/90 sm:via-[#0C4A6E]/75 sm:to-[#0C4A6E]/40" />
@@ -181,6 +182,8 @@ export default function Home() {
                 <img
                   src={f.img}
                   alt={f.name}
+                  loading="lazy"
+                  decoding="async"
                   className="h-11 w-11 shrink-0 rounded-full object-cover ring-1 ring-border"
                 />
                 <div className="min-w-0">
@@ -200,6 +203,8 @@ export default function Home() {
                 <img
                   src={f.img}
                   alt={f.name}
+                  loading="lazy"
+                  decoding="async"
                   className="mx-auto h-24 w-24 rounded-full object-cover ring-2 ring-border group-hover:ring-accent/30"
                 />
                 <div className="mt-3.5 text-[14px] font-medium text-text-primary">
@@ -336,6 +341,8 @@ export default function Home() {
                 <img
                   src={img.src}
                   alt={img.alt}
+                  loading="lazy"
+                  decoding="async"
                   className="aspect-[4/3] w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
                 <div className="bg-surface px-3 py-2 text-[11px] text-text-tertiary sm:text-[12px]">
