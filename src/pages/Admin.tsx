@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   FolderPlus,
   UploadSimple,
@@ -25,6 +26,7 @@ import {
   ArrowLeft,
   ArrowUpRight,
   TreeStructure,
+  Lightbulb,
 } from "@phosphor-icons/react";
 import { GitHubService } from "../services/github";
 import type { GitHubConfig, GitHubContent } from "../services/github";
@@ -41,6 +43,7 @@ interface Toast {
 }
 
 const STORAGE_KEY = "asiet-mca-admin";
+const ONBOARDING_KEY = "asiet-mca-admin-onboarded";
 const TOAST_MS = 4000;
 
 /* ═══════════════════════════════════════════
@@ -155,6 +158,125 @@ function buildSeedPaths(): string[] {
 }
 
 /* ═══════════════════════════════════════════
+   Tooltip Component
+   ═══════════════════════════════════════════ */
+
+function Tip({
+  children,
+  label,
+  position = "top",
+}: {
+  children: React.ReactNode;
+  label: string;
+  position?: "top" | "bottom";
+}) {
+  return (
+    <div className="group/tip relative inline-flex">
+      {children}
+      <span
+        className={`pointer-events-none absolute left-1/2 z-50 -translate-x-1/2 whitespace-nowrap rounded-md bg-stone-800 px-2.5 py-1 text-[11px] font-medium text-stone-100 opacity-0 shadow-lg transition-all duration-150 group-hover/tip:opacity-100 ${
+          position === "top" ? "bottom-full mb-2" : "top-full mt-2"
+        }`}
+      >
+        {label}
+        <span
+          className={`absolute left-1/2 -translate-x-1/2 border-[5px] border-transparent ${
+            position === "top"
+              ? "top-full border-t-stone-800"
+              : "bottom-full border-b-stone-800"
+          }`}
+        />
+      </span>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════
+   Onboarding Banner
+   ═══════════════════════════════════════════ */
+
+function OnboardingBanner({ onDismiss }: { onDismiss: () => void }) {
+  return (
+    <div className="mb-5 overflow-hidden rounded-xl border border-amber-200 bg-gradient-to-br from-amber-50 via-white to-amber-50/50 shadow-sm">
+      <div className="px-5 pt-5 pb-4">
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-100">
+              <Lightbulb
+                size={20}
+                weight="duotone"
+                className="text-amber-600"
+              />
+            </div>
+            <div>
+              <h3 className="text-[14px] font-semibold text-stone-800">
+                Welcome to the Faculty Portal
+              </h3>
+              <p className="mt-0.5 text-[12px] text-stone-500">
+                Here&rsquo;s a quick overview of managing course materials
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onDismiss}
+            className="rounded-md p-1 text-stone-400 transition-colors hover:bg-stone-100 hover:text-stone-600"
+          >
+            <X size={14} />
+          </button>
+        </div>
+
+        <div className="mt-4 grid gap-2 sm:grid-cols-3">
+          <div className="rounded-lg border border-stone-100 bg-white/80 px-3 py-2.5">
+            <FolderPlus
+              size={16}
+              weight="duotone"
+              className="text-amber-600"
+            />
+            <p className="mt-1.5 text-[12px] font-medium text-stone-700">
+              Create Folders
+            </p>
+            <p className="text-[11px] leading-relaxed text-stone-400">
+              Organize by subject and material type
+            </p>
+          </div>
+          <div className="rounded-lg border border-stone-100 bg-white/80 px-3 py-2.5">
+            <CloudArrowUp
+              size={16}
+              weight="duotone"
+              className="text-amber-600"
+            />
+            <p className="mt-1.5 text-[12px] font-medium text-stone-700">
+              Upload Files
+            </p>
+            <p className="text-[11px] leading-relaxed text-stone-400">
+              Drag &amp; drop or click the upload button
+            </p>
+          </div>
+          <div className="rounded-lg border border-stone-100 bg-white/80 px-3 py-2.5">
+            <Trash size={16} weight="duotone" className="text-amber-600" />
+            <p className="mt-1.5 text-[12px] font-medium text-stone-700">
+              Manage Content
+            </p>
+            <p className="text-[11px] leading-relaxed text-stone-400">
+              Delete outdated files or entire folders
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="border-t border-amber-100 bg-amber-50/40 px-5 py-2.5">
+        <button
+          onClick={onDismiss}
+          className="text-[11px] font-medium text-amber-700 transition-colors hover:text-amber-900"
+        >
+          Got it, don&rsquo;t show again &rarr;
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════
    Toast Component
    ═══════════════════════════════════════════ */
 
@@ -225,10 +347,7 @@ function AuthScreen({ onConnect }: { onConnect: (c: GitHubConfig) => void }) {
     hasEncrypted ? "passphrase" : "token"
   );
 
-  // Passphrase mode state
   const [passphrase, setPassphrase] = useState("");
-
-  // Token mode state
   const [token, setToken] = useState("");
   const [owner, setOwner] = useState(
     import.meta.env.VITE_GITHUB_OWNER || "asiet-mca"
@@ -306,7 +425,6 @@ function AuthScreen({ onConnect }: { onConnect: (c: GitHubConfig) => void }) {
 
   return (
     <div className="flex min-h-screen flex-col bg-amber-50/40">
-      {/* Top bar */}
       <header className="border-b border-amber-200/60 bg-white/80 backdrop-blur-sm">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-2.5 sm:px-6">
           <button
@@ -322,15 +440,12 @@ function AuthScreen({ onConnect }: { onConnect: (c: GitHubConfig) => void }) {
         </div>
       </header>
 
-      {/* Center card */}
       <div className="flex flex-1 items-center justify-center px-4 py-10">
         <div className="w-full max-w-md">
           <div className="overflow-hidden rounded-2xl border border-amber-200/60 bg-white shadow-xl shadow-amber-900/5">
-            {/* Gold accent bar */}
             <div className="h-1 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-400" />
 
             <div className="px-6 pt-7 pb-8 sm:px-8">
-              {/* Header */}
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100">
                   <GithubLogo
@@ -351,7 +466,7 @@ function AuthScreen({ onConnect }: { onConnect: (c: GitHubConfig) => void }) {
                 </div>
               </div>
 
-              {/* ── Passphrase mode ── */}
+              {/* Passphrase mode */}
               {mode === "passphrase" && (
                 <form onSubmit={handlePassphrase} className="mt-6">
                   <label className="mb-1.5 block text-[11px] font-medium uppercase tracking-wider text-stone-500">
@@ -410,7 +525,8 @@ function AuthScreen({ onConnect }: { onConnect: (c: GitHubConfig) => void }) {
                   </button>
 
                   <p className="mt-4 text-center text-[11px] leading-relaxed text-stone-400">
-                    Don't have the passphrase? Ask your department administrator.
+                    Don&rsquo;t have the passphrase? Ask your department
+                    administrator.
                   </p>
 
                   <div className="mt-4 border-t border-stone-100 pt-3 text-center">
@@ -428,10 +544,9 @@ function AuthScreen({ onConnect }: { onConnect: (c: GitHubConfig) => void }) {
                 </form>
               )}
 
-              {/* ── Token mode ── */}
+              {/* Token mode */}
               {mode === "token" && (
                 <form onSubmit={handleToken} className="mt-5">
-                  {/* Help accordion */}
                   <button
                     type="button"
                     onClick={() => setShowHelp(!showHelp)}
@@ -463,9 +578,9 @@ function AuthScreen({ onConnect }: { onConnect: (c: GitHubConfig) => void }) {
                           </a>
                         </li>
                         <li>
-                          Click <strong>"Generate new token"</strong>
+                          Click <strong>&ldquo;Generate new token&rdquo;</strong>
                         </li>
-                        <li>Name it (e.g., "ASIET MCA Admin")</li>
+                        <li>Name it (e.g., &ldquo;ASIET MCA Admin&rdquo;)</li>
                         <li>
                           Under <strong>Repository access</strong>, select the
                           repository
@@ -480,7 +595,6 @@ function AuthScreen({ onConnect }: { onConnect: (c: GitHubConfig) => void }) {
                   )}
 
                   <div className="mt-4 space-y-3.5">
-                    {/* Token */}
                     <div>
                       <label className="mb-1.5 block text-[11px] font-medium uppercase tracking-wider text-stone-500">
                         Personal Access Token
@@ -508,7 +622,6 @@ function AuthScreen({ onConnect }: { onConnect: (c: GitHubConfig) => void }) {
                       </div>
                     </div>
 
-                    {/* Owner + Repo */}
                     <div className="grid grid-cols-2 gap-3">
                       <div>
                         <label className="mb-1.5 block text-[11px] font-medium uppercase tracking-wider text-stone-500">
@@ -536,7 +649,6 @@ function AuthScreen({ onConnect }: { onConnect: (c: GitHubConfig) => void }) {
                       </div>
                     </div>
 
-                    {/* Branch + Base path */}
                     <div className="grid grid-cols-2 gap-3">
                       <div>
                         <label className="mb-1.5 block text-[11px] font-medium uppercase tracking-wider text-stone-500">
@@ -684,6 +796,9 @@ function CreateFolderModal({
             placeholder="e.g. Semester 5"
             className="w-full rounded-lg border border-stone-200 bg-stone-50/50 px-3 py-2 text-[13px] text-stone-700 placeholder:text-stone-300 focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-100 transition-colors"
           />
+          <p className="mt-1.5 text-[11px] text-stone-400">
+            Tip: Use descriptive names like &ldquo;Module 3 Notes&rdquo;
+          </p>
           <div className="mt-4 flex justify-end gap-2">
             <button
               type="button"
@@ -895,6 +1010,7 @@ function SettingsModal({
 
 export default function Admin() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPath = searchParams.get("path") || "";
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -909,20 +1025,19 @@ export default function Admin() {
       return null;
     }
   });
-  const [github, setGithub] = useState<GitHubService | null>(null);
-  const [contents, setContents] = useState<GitHubContent[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [github, setGithub] = useState<GitHubService | null>(
+    () => (config ? new GitHubService(config) : null)
+  );
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [dragOver, setDragOver] = useState(false);
-  const [uploading, setUploading] = useState(false);
   const [uploadMsg, setUploadMsg] = useState("");
   const [showCreate, setShowCreate] = useState(false);
-  const [creating, setCreating] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<GitHubContent | null>(null);
-  const [deleting, setDeleting] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [seeding, setSeeding] = useState(false);
   const [seedProgress, setSeedProgress] = useState("");
+  const [showOnboarding, setShowOnboarding] = useState(
+    () => !localStorage.getItem(ONBOARDING_KEY)
+  );
 
   /* ── Toast helper ── */
   const toast = useCallback(
@@ -941,7 +1056,12 @@ export default function Admin() {
     setToasts((t) => t.filter((x) => x.id !== id));
   }, []);
 
-  /* ── Effects ── */
+  function dismissOnboarding() {
+    setShowOnboarding(false);
+    localStorage.setItem(ONBOARDING_KEY, "1");
+  }
+
+  /* ── GitHub instance ── */
   useEffect(() => {
     if (config) {
       const gh = new GitHubService(config);
@@ -952,24 +1072,175 @@ export default function Admin() {
     }
   }, [config]);
 
-  useEffect(() => {
-    if (github) loadContents();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [github, currentPath]);
+  /* ── React Query: directory listing ── */
+  const {
+    data: contents = [],
+    isLoading,
+    isFetching,
+  } = useQuery({
+    queryKey: ["contents", currentPath],
+    queryFn: () => github!.list(currentPath),
+    enabled: !!github,
+  });
 
-  /* ── Data loading ── */
-  async function loadContents() {
-    setLoading(true);
-    try {
-      const items = await github!.list(currentPath);
-      setContents(items);
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Failed to load";
-      toast(msg, "error");
-      setContents([]);
-    }
-    setLoading(false);
-  }
+  /* ── Mutations ── */
+  const uploadMut = useMutation({
+    mutationFn: async (files: File[]) => {
+      let done = 0;
+      let failed = 0;
+      for (const file of files) {
+        setUploadMsg(`Uploading ${++done}/${files.length}: ${file.name}`);
+        try {
+          const base64 = await readFileBase64(file);
+          const target = currentPath
+            ? `${currentPath}/${file.name}`
+            : file.name;
+          await github!.upload(target, base64);
+        } catch (err: unknown) {
+          failed++;
+          const msg = err instanceof Error ? err.message : "Upload failed";
+          toast(`Failed: ${file.name} \u2014 ${msg}`, "error");
+        }
+      }
+      return { total: files.length, failed };
+    },
+    onSettled: () => {
+      setUploadMsg("");
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ["contents"] });
+      }, 2000);
+    },
+    onSuccess: ({ total, failed }) => {
+      const succeeded = total - failed;
+      if (succeeded > 0) {
+        toast(
+          `${succeeded} file${succeeded > 1 ? "s" : ""} uploaded successfully`,
+          "success"
+        );
+      }
+    },
+  });
+
+  const createMut = useMutation({
+    mutationFn: async (name: string) => {
+      const target = currentPath ? `${currentPath}/${name}` : name;
+      await github!.mkdir(target);
+      return name;
+    },
+    onMutate: async (name) => {
+      await queryClient.cancelQueries({
+        queryKey: ["contents", currentPath],
+      });
+      const prev = queryClient.getQueryData<GitHubContent[]>([
+        "contents",
+        currentPath,
+      ]);
+      // Optimistically add the new folder to the grid
+      const synthetic: GitHubContent = {
+        name,
+        path: `${config!.basePath}/${currentPath ? currentPath + "/" : ""}${name}`,
+        sha: `pending-${Date.now()}`,
+        size: 0,
+        type: "dir",
+        download_url: null,
+        html_url: "",
+      };
+      queryClient.setQueryData<GitHubContent[]>(
+        ["contents", currentPath],
+        (old) =>
+          [...(old ?? []), synthetic].sort((a, b) =>
+            a.type !== b.type
+              ? a.type === "dir"
+                ? -1
+                : 1
+              : a.name.localeCompare(b.name)
+          )
+      );
+      return { prev };
+    },
+    onError: (err: Error, _name, ctx) => {
+      if (ctx?.prev)
+        queryClient.setQueryData(["contents", currentPath], ctx.prev);
+      toast(err.message || "Failed to create folder", "error");
+    },
+    onSettled: () => {
+      // Delay refetch to give GitHub API time to propagate
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ["contents"] });
+      }, 2000);
+    },
+    onSuccess: (name) => {
+      toast(`Created folder "${name}"`, "success");
+      setShowCreate(false);
+    },
+  });
+
+  const deleteMut = useMutation({
+    mutationFn: async (item: GitHubContent) => {
+      const rel = item.path.startsWith(config!.basePath + "/")
+        ? item.path.slice(config!.basePath.length + 1)
+        : item.path;
+      if (item.type === "dir") await github!.rmdir(rel);
+      else await github!.delete(rel, item.sha);
+      return item;
+    },
+    onMutate: async (item) => {
+      await queryClient.cancelQueries({
+        queryKey: ["contents", currentPath],
+      });
+      const prev = queryClient.getQueryData<GitHubContent[]>([
+        "contents",
+        currentPath,
+      ]);
+      queryClient.setQueryData<GitHubContent[]>(
+        ["contents", currentPath],
+        (old) => old?.filter((i) => i.sha !== item.sha) ?? []
+      );
+      return { prev };
+    },
+    onError: (err: Error, _item, ctx) => {
+      if (ctx?.prev)
+        queryClient.setQueryData(["contents", currentPath], ctx.prev);
+      toast(err.message || "Failed to delete", "error");
+    },
+    onSettled: () => {
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ["contents"] });
+      }, 2000);
+    },
+    onSuccess: (item) => {
+      toast(`Deleted "${item.name}"`, "success");
+      setDeleteTarget(null);
+    },
+  });
+
+  const seedMut = useMutation({
+    mutationFn: async () => {
+      const paths = buildSeedPaths();
+      let done = 0;
+      for (const folderPath of paths) {
+        done++;
+        const parts = folderPath.split("/");
+        setSeedProgress(
+          `Creating ${parts[0]} / ${(parts[1] ?? "").substring(0, 20)}... (${done}/${paths.length})`
+        );
+        try {
+          await github!.mkdir(folderPath, `Set up ${folderPath}`);
+        } catch {
+          // Folder may already exist
+        }
+      }
+    },
+    onSettled: () => {
+      setSeedProgress("");
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ["contents"] });
+      }, 2000);
+    },
+    onSuccess: () => {
+      toast("Course structure created successfully", "success");
+    },
+  });
 
   /* ── Navigation ── */
   function navigateTo(path: string) {
@@ -983,102 +1254,10 @@ export default function Admin() {
       }))
     : [];
 
-  /* ── File operations ── */
-  async function handleUpload(files: FileList | File[]) {
+  /* ── Handlers ── */
+  function handleUpload(files: FileList | File[]) {
     if (!github || !files.length) return;
-    setUploading(true);
-    const arr = Array.from(files);
-    let done = 0;
-    let failed = 0;
-
-    for (const file of arr) {
-      setUploadMsg(`Uploading ${++done}/${arr.length}: ${file.name}`);
-      try {
-        const base64 = await readFileBase64(file);
-        const target = currentPath
-          ? `${currentPath}/${file.name}`
-          : file.name;
-        await github.upload(target, base64);
-      } catch (err: unknown) {
-        failed++;
-        const msg = err instanceof Error ? err.message : "Upload failed";
-        toast(`Failed: ${file.name} \u2014 ${msg}`, "error");
-      }
-    }
-
-    setUploading(false);
-    setUploadMsg("");
-    const succeeded = arr.length - failed;
-    if (succeeded > 0) {
-      toast(
-        `${succeeded} file${succeeded > 1 ? "s" : ""} uploaded successfully`,
-        "success"
-      );
-    }
-    loadContents();
-  }
-
-  async function handleCreate(name: string) {
-    if (!github) return;
-    setCreating(true);
-    try {
-      const target = currentPath ? `${currentPath}/${name}` : name;
-      await github.mkdir(target);
-      toast(`Created folder "${name}"`, "success");
-      setShowCreate(false);
-      loadContents();
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Failed to create";
-      toast(msg, "error");
-    }
-    setCreating(false);
-  }
-
-  async function handleDelete() {
-    if (!github || !deleteTarget) return;
-    setDeleting(true);
-    try {
-      const rel = deleteTarget.path.startsWith(config!.basePath + "/")
-        ? deleteTarget.path.slice(config!.basePath.length + 1)
-        : deleteTarget.path;
-      if (deleteTarget.type === "dir") {
-        await github.rmdir(rel);
-      } else {
-        await github.delete(rel, deleteTarget.sha);
-      }
-      setContents((c) => c.filter((i) => i.sha !== deleteTarget.sha));
-      toast(`Deleted "${deleteTarget.name}"`, "success");
-      setDeleteTarget(null);
-      // Background refetch to reconcile with actual repo state
-      loadContents();
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Failed to delete";
-      toast(msg, "error");
-    }
-    setDeleting(false);
-  }
-
-  async function handleSeedStructure() {
-    if (!github) return;
-    setSeeding(true);
-    const paths = buildSeedPaths();
-    let done = 0;
-    for (const folderPath of paths) {
-      done++;
-      const parts = folderPath.split("/");
-      setSeedProgress(
-        `Creating ${parts[0]} / ${(parts[1] ?? "").substring(0, 20)}... (${done}/${paths.length})`
-      );
-      try {
-        await github.mkdir(folderPath, `Set up ${folderPath}`);
-      } catch {
-        // Folder may already exist, skip
-      }
-    }
-    setSeeding(false);
-    setSeedProgress("");
-    toast("Course structure created successfully", "success");
-    loadContents();
+    uploadMut.mutate(Array.from(files));
   }
 
   function handleCopyLink(item: GitHubContent) {
@@ -1100,7 +1279,7 @@ export default function Admin() {
     localStorage.removeItem(STORAGE_KEY);
     setConfig(null);
     setGithub(null);
-    setContents([]);
+    queryClient.clear();
   }
 
   /* ── Drag & Drop ── */
@@ -1164,7 +1343,7 @@ export default function Admin() {
       )}
 
       {/* Upload progress overlay */}
-      {uploading && (
+      {uploadMut.isPending && (
         <div className="fixed inset-0 z-30 flex items-center justify-center bg-black/20 backdrop-blur-sm">
           <div className="flex items-center gap-3 rounded-xl bg-white px-6 py-4 shadow-xl">
             <SpinnerGap size={20} className="animate-spin text-amber-600" />
@@ -1177,13 +1356,15 @@ export default function Admin() {
       <header className="sticky top-0 z-20 border-b border-amber-200/60 bg-white/90 backdrop-blur-sm">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-2.5 sm:px-6">
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => navigate("/")}
-              className="flex items-center gap-1.5 text-[12px] text-stone-500 transition-colors hover:text-stone-700"
-            >
-              <House size={14} weight="duotone" />
-              <span className="hidden sm:inline">Home</span>
-            </button>
+            <Tip label="Back to home page" position="bottom">
+              <button
+                onClick={() => navigate("/")}
+                className="flex items-center gap-1.5 text-[12px] text-stone-500 transition-colors hover:text-stone-700"
+              >
+                <House size={14} weight="duotone" />
+                <span className="hidden sm:inline">Home</span>
+              </button>
+            </Tip>
             <div className="h-4 w-px bg-stone-200" />
             <div className="flex items-center gap-2">
               <div className="flex h-6 w-6 items-center justify-center rounded-md bg-amber-100">
@@ -1202,20 +1383,28 @@ export default function Admin() {
             </div>
           </div>
           <div className="flex items-center gap-1">
-            <button
-              onClick={() => setShowSettings(true)}
-              className="rounded-lg p-2 text-stone-400 transition-colors hover:bg-stone-100 hover:text-stone-600"
-              title="Settings"
-            >
-              <GearSix size={16} />
-            </button>
-            <button
-              onClick={logout}
-              className="rounded-lg p-2 text-stone-400 transition-colors hover:bg-red-50 hover:text-red-500"
-              title="Disconnect"
-            >
-              <SignOut size={16} />
-            </button>
+            {isFetching && !isLoading && (
+              <SpinnerGap
+                size={14}
+                className="animate-spin text-amber-500 mr-1"
+              />
+            )}
+            <Tip label="Connection settings" position="bottom">
+              <button
+                onClick={() => setShowSettings(true)}
+                className="rounded-lg p-2 text-stone-400 transition-colors hover:bg-stone-100 hover:text-stone-600"
+              >
+                <GearSix size={16} />
+              </button>
+            </Tip>
+            <Tip label="Sign out" position="bottom">
+              <button
+                onClick={logout}
+                className="rounded-lg p-2 text-stone-400 transition-colors hover:bg-red-50 hover:text-red-500"
+              >
+                <SignOut size={16} />
+              </button>
+            </Tip>
           </div>
         </div>
       </header>
@@ -1223,6 +1412,11 @@ export default function Admin() {
       {/* Main content */}
       <main className="flex-1">
         <div className="mx-auto max-w-6xl px-4 py-5 sm:px-6 sm:py-6">
+          {/* Onboarding */}
+          {showOnboarding && (
+            <OnboardingBanner onDismiss={dismissOnboarding} />
+          )}
+
           {/* Breadcrumbs */}
           <nav className="scrollbar-none flex items-center gap-1 overflow-x-auto text-[13px]">
             <button
@@ -1260,41 +1454,53 @@ export default function Admin() {
 
           {/* Action bar */}
           <div className="mt-4 flex flex-wrap items-center gap-2">
-            <button
-              onClick={() => setShowCreate(true)}
-              className="flex items-center gap-1.5 rounded-lg border border-stone-200 bg-white px-3 py-2 text-[12px] font-medium text-stone-700 shadow-sm transition-colors hover:border-amber-300 hover:bg-amber-50"
-            >
-              <FolderPlus
-                size={15}
-                weight="duotone"
-                className="text-amber-600"
-              />
-              New Folder
-            </button>
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="flex items-center gap-1.5 rounded-lg border border-stone-200 bg-white px-3 py-2 text-[12px] font-medium text-stone-700 shadow-sm transition-colors hover:border-amber-300 hover:bg-amber-50"
-            >
-              <UploadSimple
-                size={15}
-                weight="duotone"
-                className="text-amber-600"
-              />
-              Upload Files
-            </button>
-            <button
-              onClick={loadContents}
-              disabled={loading}
-              className="flex items-center gap-1.5 rounded-lg border border-stone-200 bg-white px-3 py-2 text-[12px] font-medium text-stone-700 shadow-sm transition-colors hover:border-stone-300 hover:bg-stone-50 disabled:opacity-50"
-            >
-              <ArrowsClockwise
-                size={15}
-                className={
-                  loading ? "animate-spin text-amber-600" : "text-stone-500"
+            <Tip label="Create a new folder here">
+              <button
+                onClick={() => setShowCreate(true)}
+                className="flex items-center gap-1.5 rounded-lg border border-stone-200 bg-white px-3 py-2 text-[12px] font-medium text-stone-700 shadow-sm transition-colors hover:border-amber-300 hover:bg-amber-50"
+              >
+                <FolderPlus
+                  size={15}
+                  weight="duotone"
+                  className="text-amber-600"
+                />
+                New Folder
+              </button>
+            </Tip>
+            <Tip label="Upload files from your computer">
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="flex items-center gap-1.5 rounded-lg border border-stone-200 bg-white px-3 py-2 text-[12px] font-medium text-stone-700 shadow-sm transition-colors hover:border-amber-300 hover:bg-amber-50"
+              >
+                <UploadSimple
+                  size={15}
+                  weight="duotone"
+                  className="text-amber-600"
+                />
+                Upload Files
+              </button>
+            </Tip>
+            <Tip label="Reload folder contents">
+              <button
+                onClick={() =>
+                  queryClient.invalidateQueries({
+                    queryKey: ["contents", currentPath],
+                  })
                 }
-              />
-              Refresh
-            </button>
+                disabled={isFetching}
+                className="flex items-center gap-1.5 rounded-lg border border-stone-200 bg-white px-3 py-2 text-[12px] font-medium text-stone-700 shadow-sm transition-colors hover:border-stone-300 hover:bg-stone-50 disabled:opacity-50"
+              >
+                <ArrowsClockwise
+                  size={15}
+                  className={
+                    isFetching
+                      ? "animate-spin text-amber-600"
+                      : "text-stone-500"
+                  }
+                />
+                Refresh
+              </button>
+            </Tip>
             <input
               ref={fileInputRef}
               type="file"
@@ -1309,7 +1515,7 @@ export default function Admin() {
 
           {/* Content grid */}
           <div className="mt-5">
-            {loading && !contents.length ? (
+            {isLoading || !github ? (
               /* Loading skeleton */
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                 {Array.from({ length: 8 }).map((_, i) => (
@@ -1332,13 +1538,13 @@ export default function Admin() {
                 <p className="mt-4 text-[14px] font-medium text-stone-600">
                   This folder is empty
                 </p>
-                <p className="mt-1 text-[12px] text-stone-400">
+                <p className="mt-1 max-w-xs text-[12px] leading-relaxed text-stone-400">
                   {!currentPath
-                    ? "Set up the course structure or start adding folders manually"
-                    : "Upload files or create a subfolder to get started"}
+                    ? "Set up the course structure to get started, or create folders manually."
+                    : "Upload files here using the button above, or drag and drop them anywhere on this page."}
                 </p>
 
-                {/* Seed structure card - only at root */}
+                {/* Seed structure card — only at root */}
                 {!currentPath && (
                   <div className="mt-6 w-full max-w-md rounded-xl border border-amber-200 bg-gradient-to-b from-amber-50 to-white p-5 text-left shadow-sm">
                     <div className="flex items-center gap-2.5">
@@ -1378,11 +1584,11 @@ export default function Admin() {
                       Lab Records folders
                     </p>
                     <button
-                      onClick={handleSeedStructure}
-                      disabled={seeding}
+                      onClick={() => seedMut.mutate()}
+                      disabled={seedMut.isPending}
                       className="mt-3.5 flex w-full items-center justify-center gap-2 rounded-lg bg-amber-600 px-4 py-2.5 text-[12px] font-medium text-white shadow-sm transition-all hover:bg-amber-700 active:scale-[0.98] disabled:opacity-60"
                     >
-                      {seeding ? (
+                      {seedMut.isPending ? (
                         <>
                           <SpinnerGap
                             size={14}
@@ -1466,27 +1672,32 @@ export default function Admin() {
                     {/* Hover action buttons */}
                     <div className="absolute right-2 top-2 flex gap-0.5 sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100">
                       {item.type === "file" && (
+                        <Tip label="Copy download link" position="bottom">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleCopyLink(item);
+                            }}
+                            className="rounded-md border border-stone-200 bg-white p-1 text-stone-400 shadow-sm transition-colors hover:border-blue-200 hover:text-blue-600"
+                          >
+                            <Copy size={12} />
+                          </button>
+                        </Tip>
+                      )}
+                      <Tip
+                        label={`Delete ${item.type === "dir" ? "folder" : "file"}`}
+                        position="bottom"
+                      >
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleCopyLink(item);
+                            setDeleteTarget(item);
                           }}
-                          className="rounded-md border border-stone-200 bg-white p-1 text-stone-400 shadow-sm transition-colors hover:border-blue-200 hover:text-blue-600"
-                          title="Copy link"
+                          className="rounded-md border border-stone-200 bg-white p-1 text-stone-400 shadow-sm transition-colors hover:border-red-200 hover:text-red-500"
                         >
-                          <Copy size={12} />
+                          <Trash size={12} />
                         </button>
-                      )}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setDeleteTarget(item);
-                        }}
-                        className="rounded-md border border-stone-200 bg-white p-1 text-stone-400 shadow-sm transition-colors hover:border-red-200 hover:text-red-500"
-                        title="Delete"
-                      >
-                        <Trash size={12} />
-                      </button>
+                      </Tip>
                     </div>
                   </div>
                 ))}
@@ -1495,7 +1706,7 @@ export default function Admin() {
           </div>
 
           {/* Upload hint at bottom */}
-          {!loading && contents.length > 0 && (
+          {!isLoading && contents.length > 0 && (
             <button
               onClick={() => fileInputRef.current?.click()}
               className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-stone-200 bg-stone-50/50 py-5 text-[12px] text-stone-400 transition-colors hover:border-amber-300 hover:bg-amber-50/50 hover:text-amber-700"
@@ -1527,15 +1738,17 @@ export default function Admin() {
       {/* Modals */}
       <CreateFolderModal
         open={showCreate}
-        loading={creating}
+        loading={createMut.isPending}
         onClose={() => setShowCreate(false)}
-        onCreate={handleCreate}
+        onCreate={(name) => createMut.mutate(name)}
       />
       <DeleteModal
         item={deleteTarget}
-        loading={deleting}
+        loading={deleteMut.isPending}
         onClose={() => setDeleteTarget(null)}
-        onConfirm={handleDelete}
+        onConfirm={() => {
+          if (deleteTarget) deleteMut.mutate(deleteTarget);
+        }}
       />
       <SettingsModal
         open={showSettings}
