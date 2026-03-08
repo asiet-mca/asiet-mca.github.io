@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { Helmet } from "react-helmet-async";
 import { useSearchParams } from "react-router-dom";
 import { SpinnerGap } from "@phosphor-icons/react";
 import Sidebar from "../components/Sidebar";
@@ -42,8 +43,22 @@ export default function Explorer() {
   const fileCount =
     currentNode?.children?.filter((c) => c.type === "file").length || 0;
 
+  const pageTitle = currentPath === "/"
+    ? "File Explorer — ASIET MCA Course Materials"
+    : `${currentPath.split("/").pop()} — ASIET MCA Course Materials`;
+
   return (
     <div className="flex h-screen overflow-hidden bg-bg">
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta name="description" content="Browse and download MCA course materials — notes, assignments, question papers, and lab records from ASIET Kalady." />
+        <meta name="keywords" content="ASIET MCA materials, ASIET MCA notes, ASIET MCA question papers, ASIET MCA assignments, MCA study materials Kalady" />
+        <link rel="canonical" href="https://asiet-mca.github.io/explorer" />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content="Browse and download MCA course materials from ASIET Kalady." />
+        <meta property="og:url" content="https://asiet-mca.github.io/explorer" />
+      </Helmet>
+
       {/* Sidebar: hidden on mobile, visible on desktop */}
       <div className="hidden md:flex">
         <Sidebar

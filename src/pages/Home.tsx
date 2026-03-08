@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowRight,
@@ -61,6 +62,16 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-bg">
+      <Helmet>
+        <title>ASIET MCA — Department of Computer Applications | Adi Shankara Institute</title>
+        <meta name="description" content="Official course materials portal for the Department of Computer Applications (MCA) at Adi Shankara Institute of Engineering & Technology (ASIET), Kalady, Kerala. Access notes, assignments, question papers, and lab records." />
+        <meta name="keywords" content="ASIET MCA, ASIET, Adi Shankara MCA, ASIET Kalady MCA, ASIET MCA department, ASIET MCA course materials, MCA Kalady, Adi Shankara Institute MCA, ASIET computer applications, MCA Kerala" />
+        <link rel="canonical" href="https://asiet-mca.github.io/" />
+        <meta property="og:title" content="ASIET MCA — Department of Computer Applications" />
+        <meta property="og:description" content="Browse notes, assignments, question papers & lab records for the MCA programme at ASIET, Kalady." />
+        <meta property="og:url" content="https://asiet-mca.github.io/" />
+      </Helmet>
+
       {/* ─── Top bar ─── */}
       <header className="border-b border-border bg-surface">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-2.5 sm:px-6">

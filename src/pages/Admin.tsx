@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { Helmet } from "react-helmet-async";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -1441,6 +1442,10 @@ export default function Admin() {
       onDragOver={onDragOver}
       onDrop={onDrop}
     >
+      <Helmet>
+        <title>Faculty Portal — ASIET MCA Materials Management</title>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       {/* Drag overlay */}
       {dragOver && (
         <div className="fixed inset-0 z-30 flex items-center justify-center bg-amber-100/80 backdrop-blur-sm animate-fade-in">
