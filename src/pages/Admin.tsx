@@ -24,6 +24,7 @@ import {
   Copy,
   ArrowLeft,
   ArrowUpRight,
+  TreeStructure,
 } from "@phosphor-icons/react";
 import { GitHubService } from "../services/github";
 import type { GitHubConfig, GitHubContent } from "../services/github";
@@ -90,6 +91,67 @@ function readFileBase64(file: File): Promise<string> {
     r.onerror = reject;
     r.readAsDataURL(file);
   });
+}
+
+/* ═══════════════════════════════════════════
+   Course Structure (for initial seeding)
+   ═══════════════════════════════════════════ */
+
+const MATERIAL_TYPES = ["Notes", "Assignments", "Question Papers", "Lab Records"];
+
+const CURRICULUM = [
+  {
+    name: "Semester 1",
+    subjects: [
+      "Discrete Mathematics",
+      "Computer Organization & Architecture",
+      "Data Structures Using C",
+      "Programming in Python",
+      "Professional Communication",
+    ],
+  },
+  {
+    name: "Semester 2",
+    subjects: [
+      "Operating Systems",
+      "Database Management Systems",
+      "Object Oriented Programming Using Java",
+      "Computer Networks",
+      "Optimization Techniques",
+    ],
+  },
+  {
+    name: "Semester 3",
+    subjects: [
+      "Machine Learning",
+      "Web Technologies",
+      "Software Engineering",
+      "Data Mining & Warehousing",
+      "Cloud Computing",
+    ],
+  },
+  {
+    name: "Semester 4",
+    subjects: [
+      "Artificial Intelligence",
+      "Distributed Systems",
+      "Cyber Security",
+      "Project & Viva Voce",
+      "Seminar",
+    ],
+  },
+];
+
+function buildSeedPaths(): string[] {
+  const paths: string[] = [];
+  for (const sem of CURRICULUM) {
+    for (const subject of sem.subjects) {
+      for (const mat of MATERIAL_TYPES) {
+        paths.push(`${sem.name}/${subject}/${mat}`);
+      }
+    }
+  }
+  return paths;
 }
 
 /* ═══════════════════════════════════════════
@@ -859,6 +921,8 @@ export default function Admin() {
   const [deleteTarget, setDeleteTarget] = useState<GitHubContent | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [seeding, setSeeding] = useState(false);
+  const [seedProgress, setSeedProgress] = useState("");
 
   /* ── Toast helper ── */
   const toast = useCallback(
@@ -990,6 +1054,29 @@ export default function Admin() {
       toast(msg, "error");
     }
     setDeleting(false);
+  }
+
+  async function handleSeedStructure() {
+    if (!github) return;
+    setSeeding(true);
+    const paths = buildSeedPaths();
+    let done = 0;
+    for (const folderPath of paths) {
+      done++;
+      const parts = folderPath.split("/");
+      setSeedProgress(
+        `Creating ${parts[0]} / ${(parts[1] ?? "").substring(0, 20)}... (${done}/${paths.length})`
+      );
+      try {
+        await github.mkdir(folderPath, `Set up ${folderPath}`);
+      } catch {
+        // Folder may already exist, skip
+      }
+    }
+    setSeeding(false);
+    setSeedProgress("");
+    toast("Course structure created successfully", "success");
+    loadContents();
   }
 
   function handleCopyLink(item: GitHubContent) {
@@ -1244,8 +1331,73 @@ export default function Admin() {
                   This folder is empty
                 </p>
                 <p className="mt-1 text-[12px] text-stone-400">
-                  Upload files or create a subfolder to get started
+                  {!currentPath
+                    ? "Set up the course structure or start adding folders manually"
+                    : "Upload files or create a subfolder to get started"}
                 </p>
+
+                {/* Seed structure card - only at root */}
+                {!currentPath && (
+                  <div className="mt-6 w-full max-w-md rounded-xl border border-amber-200 bg-gradient-to-b from-amber-50 to-white p-5 text-left shadow-sm">
+                    <div className="flex items-center gap-2.5">
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-100">
+                        <TreeStructure
+                          size={18}
+                          weight="duotone"
+                          className="text-amber-600"
+                        />
+                      </div>
+                      <div>
+                        <p className="text-[13px] font-medium text-stone-700">
+                          Set up MCA course structure
+                        </p>
+                        <p className="text-[11px] text-stone-500">
+                          Creates 4 semesters, 20 subjects, 80 material folders
+                        </p>
+                      </div>
+                    </div>
+                    <div className="mt-3 grid grid-cols-2 gap-1.5 text-[11px] text-stone-500">
+                      {CURRICULUM.map((sem) => (
+                        <div
+                          key={sem.name}
+                          className="rounded-md border border-stone-100 bg-white px-2.5 py-1.5"
+                        >
+                          <span className="font-medium text-stone-700">
+                            {sem.name}
+                          </span>
+                          <span className="ml-1 text-stone-400">
+                            &middot; {sem.subjects.length} subjects
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="mt-2.5 text-[10px] text-stone-400">
+                      Each subject gets: Notes, Assignments, Question Papers &
+                      Lab Records folders
+                    </p>
+                    <button
+                      onClick={handleSeedStructure}
+                      disabled={seeding}
+                      className="mt-3.5 flex w-full items-center justify-center gap-2 rounded-lg bg-amber-600 px-4 py-2.5 text-[12px] font-medium text-white shadow-sm transition-all hover:bg-amber-700 active:scale-[0.98] disabled:opacity-60"
+                    >
+                      {seeding ? (
+                        <>
+                          <SpinnerGap
+                            size={14}
+                            className="animate-spin"
+                          />
+                          {seedProgress}
+                        </>
+                      ) : (
+                        <>
+                          <TreeStructure size={14} />
+                          Create Course Structure
+                        </>
+                      )}
+                    </button>
+                  </div>
+                )}
+
                 <div className="mt-5 flex gap-2">
                   <button
                     onClick={() => setShowCreate(true)}
