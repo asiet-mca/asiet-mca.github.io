@@ -150,8 +150,12 @@ export class GitHubService {
       const rel = item.path.startsWith(this.config.basePath + "/")
         ? item.path.slice(this.config.basePath.length + 1)
         : item.path;
-      if (item.type === "dir") await this.rmdir(rel, m);
-      else await this.delete(rel, item.sha, m);
+      try {
+        if (item.type === "dir") await this.rmdir(rel, m);
+        else await this.delete(rel, item.sha, m);
+      } catch {
+        // Continue deleting remaining items even if one fails
+      }
     }
   }
 
