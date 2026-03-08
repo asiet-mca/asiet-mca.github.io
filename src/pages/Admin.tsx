@@ -1707,8 +1707,8 @@ export default function Admin() {
                         )}
                         {syncingNames.has(item.name) && (
                           <SpinnerGap
-                            size={14}
-                            className="absolute -right-1 -bottom-1 animate-spin text-amber-500"
+                            size={16}
+                            className="absolute inset-0 m-auto animate-spin text-amber-600"
                           />
                         )}
                       </div>
