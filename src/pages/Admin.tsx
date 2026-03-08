@@ -1082,11 +1082,11 @@ export default function Admin() {
     ) => {
       if (!github) return;
       if (trackName) setSyncingNames((s) => new Set(s).add(trackName));
-      const maxAttempts = 15;
+      const maxAttempts = 20;
       let synced = false;
       for (let i = 0; i < maxAttempts; i++) {
-        // Wait 2s before each attempt
-        await new Promise((r) => setTimeout(r, 2000));
+        // Wait 3s before each attempt (~60s total)
+        await new Promise((r) => setTimeout(r, 3000));
         try {
           const items = await github.list(path);
           if (check(items)) {
