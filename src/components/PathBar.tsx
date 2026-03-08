@@ -40,6 +40,7 @@ export default function PathBar({
       {/* Mobile menu toggle */}
       <button
         onClick={onMenuToggle}
+        aria-label="Toggle sidebar"
         className="flex h-7 w-7 shrink-0 items-center justify-center rounded text-text-secondary transition-colors cursor-pointer hover:bg-hover md:hidden"
       >
         <SidebarSimple size={16} weight="regular" />
@@ -50,6 +51,7 @@ export default function PathBar({
         <button
           onClick={onBack}
           disabled={!canGoBack}
+          aria-label="Go back"
           className={cn(
             "flex h-7 w-7 items-center justify-center rounded transition-colors",
             canGoBack
@@ -62,6 +64,7 @@ export default function PathBar({
         <button
           onClick={onForward}
           disabled={!canGoForward}
+          aria-label="Go forward"
           className={cn(
             "flex h-7 w-7 items-center justify-center rounded transition-colors",
             canGoForward
@@ -77,6 +80,7 @@ export default function PathBar({
       <div className="flex min-w-0 flex-1 items-center gap-px overflow-x-auto rounded border border-border bg-bg px-2 py-[5px] font-mono text-[12.5px] scrollbar-none">
         <button
           onClick={() => onNavigate("/")}
+          aria-label="Go to root"
           className="flex shrink-0 items-center rounded px-1 text-text-tertiary transition-colors cursor-pointer hover:bg-hover hover:text-accent"
         >
           <House size={13} weight="bold" />
@@ -103,6 +107,7 @@ export default function PathBar({
       <div className="flex shrink-0 items-center rounded border border-border">
         <button
           onClick={() => onToggleView("grid")}
+          aria-label="Grid view"
           className={cn(
             "flex h-7 w-7 items-center justify-center rounded-l transition-colors cursor-pointer",
             viewMode === "grid"
@@ -114,6 +119,7 @@ export default function PathBar({
         </button>
         <button
           onClick={() => onToggleView("list")}
+          aria-label="List view"
           className={cn(
             "flex h-7 w-7 items-center justify-center rounded-r border-l border-border transition-colors cursor-pointer",
             viewMode === "list"

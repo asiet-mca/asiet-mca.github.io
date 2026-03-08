@@ -91,6 +91,7 @@ export default function Home() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => navigate("/admin")}
+              aria-label="Faculty Portal"
               className="flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-[11px] font-medium text-text-secondary transition-colors hover:border-amber-300 hover:bg-amber-50 hover:text-amber-800 sm:px-3 sm:text-[12px]"
             >
               <GearSix size={13} weight="duotone" />
@@ -107,6 +108,7 @@ export default function Home() {
         </div>
       </header>
 
+      <main>
       {/* ─── Hero Banner ─── */}
       <section className="relative border-b border-border overflow-hidden">
         <div className="absolute inset-0">
@@ -132,7 +134,7 @@ export default function Home() {
             Master of Computer Applications
           </h1>
           <p
-            className="animate-fade-up mt-3 max-w-lg text-[13px] leading-relaxed text-sky-100/80 sm:mt-5 sm:text-[15px]"
+            className="animate-fade-up mt-3 max-w-lg text-[13px] leading-relaxed text-sky-100 sm:mt-5 sm:text-[15px]"
             style={{ animationDelay: "160ms" }}
           >
             Nurturing globally competent computing professionals with innovation,
@@ -174,7 +176,7 @@ export default function Home() {
                 <div className="font-display text-xl font-semibold text-white sm:text-2xl">
                   {s.value}
                 </div>
-                <div className="text-[10px] text-sky-200/70 sm:text-[12px]">{s.label}</div>
+                <div className="text-[10px] text-sky-200 sm:text-[12px]">{s.label}</div>
               </div>
             ))}
           </div>
@@ -389,6 +391,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      </main>
 
       {/* ─── Footer ─── */}
       <footer className="bg-surface border-t border-border">
