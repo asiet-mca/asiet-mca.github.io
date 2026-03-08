@@ -1201,11 +1201,30 @@ export default function Admin() {
       setUploadMsg("");
       const names = _data?.uploaded ?? [];
       if (names.length > 0) {
+        // Re-assert syncing state after overlay disappears
+        setSyncingNames((s) => {
+          const next = new Set(s);
+          names.forEach((n) => next.add(n));
+          return next;
+        });
+        // Poll to confirm — but don't pass trackNames so poll doesn't
+        // auto-clear them; we clear manually after a minimum display time
+        const started = Date.now();
         pollForSync(
           currentPath,
-          (items) => names.every((n) => items.some((i) => i.name === n)),
-          names
-        );
+          (items) => names.every((n) => items.some((i) => i.name === n))
+        ).then(() => {
+          // Ensure the syncing animation shows for at least 5s after overlay
+          const elapsed = Date.now() - started;
+          const remaining = Math.max(0, 5000 - elapsed);
+          setTimeout(() => {
+            setSyncingNames((s) => {
+              const next = new Set(s);
+              names.forEach((n) => next.delete(n));
+              return next;
+            });
+          }, remaining);
+        });
       } else {
         // All failed — clear syncing state
         setSyncingNames(new Set());
