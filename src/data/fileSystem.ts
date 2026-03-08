@@ -1,3 +1,19 @@
+export interface FileSystemNode {
+  id: string;
+  name: string;
+  type: "folder" | "file";
+  path: string;
+  children?: FileSystemNode[];
+  fileType?: string;
+  size?: string;
+  modified?: string;
+}
+
+export interface Breadcrumb {
+  name: string;
+  path: string;
+}
+
 const materialTypes = ["Notes", "Assignments", "Question Papers", "Lab Records"];
 
 const semesters = [
@@ -47,12 +63,12 @@ const semesters = [
 // Each node: { id, name, type: 'folder'|'file', children: [], path: string }
 
 let idCounter = 0;
-function nextId() {
+function nextId(): string {
   return `node-${++idCounter}`;
 }
 
-function buildFileSystem() {
-  const root = {
+function buildFileSystem(): FileSystemNode {
+  const root: FileSystemNode = {
     id: nextId(),
     name: "ASIET MCA",
     type: "folder",
@@ -61,7 +77,7 @@ function buildFileSystem() {
   };
 
   for (const sem of semesters) {
-    const semNode = {
+    const semNode: FileSystemNode = {
       id: nextId(),
       name: sem.name,
       type: "folder",
@@ -70,7 +86,7 @@ function buildFileSystem() {
     };
 
     for (const subject of sem.subjects) {
-      const subNode = {
+      const subNode: FileSystemNode = {
         id: nextId(),
         name: subject,
         type: "folder",
@@ -79,7 +95,7 @@ function buildFileSystem() {
       };
 
       for (const mat of materialTypes) {
-        const matNode = {
+        const matNode: FileSystemNode = {
           id: nextId(),
           name: mat,
           type: "folder",
@@ -106,13 +122,13 @@ function buildFileSystem() {
             },
           ],
         };
-        subNode.children.push(matNode);
+        subNode.children!.push(matNode);
       }
 
-      semNode.children.push(subNode);
+      semNode.children!.push(subNode);
     }
 
-    root.children.push(semNode);
+    root.children!.push(semNode);
   }
 
   return root;
@@ -121,11 +137,11 @@ function buildFileSystem() {
 export const fileSystem = buildFileSystem();
 
 // Utility: find node by path
-export function findNodeByPath(path) {
+export function findNodeByPath(path: string): FileSystemNode | null {
   if (path === "/") return fileSystem;
 
   const parts = path.split("/").filter(Boolean);
-  let current = fileSystem;
+  let current: FileSystemNode = fileSystem;
 
   for (const part of parts) {
     if (!current.children) return null;
@@ -138,11 +154,11 @@ export function findNodeByPath(path) {
 }
 
 // Utility: get breadcrumb segments from path
-export function getBreadcrumbs(path) {
+export function getBreadcrumbs(path: string): Breadcrumb[] {
   if (path === "/") return [{ name: "ASIET MCA", path: "/" }];
 
   const parts = path.split("/").filter(Boolean);
-  const crumbs = [{ name: "ASIET MCA", path: "/" }];
+  const crumbs: Breadcrumb[] = [{ name: "ASIET MCA", path: "/" }];
   let currentPath = "";
 
   for (const part of parts) {
@@ -154,6 +170,6 @@ export function getBreadcrumbs(path) {
 }
 
 // Utility: get all folder paths for the sidebar tree
-export function getFolderTree() {
+export function getFolderTree(): FileSystemNode {
   return fileSystem;
 }

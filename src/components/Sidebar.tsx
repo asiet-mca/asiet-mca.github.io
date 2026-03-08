@@ -1,8 +1,19 @@
 import { SidebarSimple, X } from "@phosphor-icons/react";
 import FolderTree from "./FolderTree";
 import { cn } from "../lib/utils";
+import type { FileSystemNode } from "../data/fileSystem";
 
-export default function Sidebar({ tree, currentPath, onNavigate, collapsed, onToggle, mobileOpen, onMobileClose }) {
+interface SidebarProps {
+  tree: FileSystemNode;
+  currentPath: string;
+  onNavigate: (path: string) => void;
+  collapsed: boolean;
+  onToggle: () => void;
+  mobileOpen: boolean;
+  onMobileClose: () => void;
+}
+
+export default function Sidebar({ tree, currentPath, onNavigate, collapsed, onToggle, mobileOpen, onMobileClose }: SidebarProps) {
   return (
     <>
       {/* Mobile overlay backdrop */}
@@ -69,7 +80,7 @@ export default function Sidebar({ tree, currentPath, onNavigate, collapsed, onTo
             <FolderTree
               tree={tree}
               currentPath={currentPath}
-              onNavigate={(path) => {
+              onNavigate={(path: string) => {
                 onNavigate(path);
                 onMobileClose();
               }}

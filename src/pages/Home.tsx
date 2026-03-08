@@ -6,12 +6,12 @@ import {
   Flask,
   Users,
   Certificate,
-  GraduationCap,
   EnvelopeSimple,
   Phone,
   MapPin,
   ArrowUpRight,
   Images,
+  GearSix,
 } from "@phosphor-icons/react";
 
 const faculty = [
@@ -75,13 +75,22 @@ export default function Home() {
               MCA
             </span>
           </div>
-          <button
-            onClick={() => navigate("/explorer")}
-            className="flex items-center gap-1.5 rounded-md bg-accent px-3 py-1.5 text-[11px] font-medium text-white transition-colors hover:bg-accent-light sm:px-3.5 sm:text-[12px]"
-          >
-            <FolderSimple size={14} weight="duotone" />
-            File Explorer
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => navigate("/admin")}
+              className="flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-[11px] font-medium text-text-secondary transition-colors hover:border-amber-300 hover:bg-amber-50 hover:text-amber-800 sm:px-3 sm:text-[12px]"
+            >
+              <GearSix size={13} weight="duotone" />
+              <span className="hidden sm:inline">Faculty</span>
+            </button>
+            <button
+              onClick={() => navigate("/explorer")}
+              className="flex items-center gap-1.5 rounded-md bg-accent px-3 py-1.5 text-[11px] font-medium text-white transition-colors hover:bg-accent-light sm:px-3.5 sm:text-[12px]"
+            >
+              <FolderSimple size={14} weight="duotone" />
+              File Explorer
+            </button>
+          </div>
         </div>
       </header>
 
@@ -400,8 +409,14 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="mt-5 border-t border-border-subtle pt-3 text-[10px] text-text-quaternary sm:mt-6 sm:pt-4 sm:text-[11px]">
-            Course Materials Repository — Built for ASIET MCA students
+          <div className="mt-5 flex items-center justify-between border-t border-border-subtle pt-3 text-[10px] text-text-quaternary sm:mt-6 sm:pt-4 sm:text-[11px]">
+            <span>Course Materials Repository — Built for ASIET MCA students</span>
+            <button
+              onClick={() => navigate("/admin")}
+              className="text-text-quaternary transition-colors hover:text-accent"
+            >
+              Faculty Portal
+            </button>
           </div>
         </div>
       </footer>

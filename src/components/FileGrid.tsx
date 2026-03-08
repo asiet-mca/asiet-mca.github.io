@@ -1,9 +1,15 @@
-import { FolderSimple, FolderOpen } from "@phosphor-icons/react";
+import { FolderOpen } from "@phosphor-icons/react";
 import { FolderIcon, TypeFileIcon } from "./FileIcon";
 import { cn } from "../lib/utils";
+import type { FileSystemNode } from "../data/fileSystem";
+
+interface ItemProps {
+  item: FileSystemNode;
+  onOpen: (item: FileSystemNode) => void;
+}
 
 /* ─── Grid View Card ─── */
-function GridCard({ item, onOpen }) {
+function GridCard({ item, onOpen }: ItemProps) {
   const isFolder = item.type === "folder";
 
   return (
@@ -50,7 +56,7 @@ function GridCard({ item, onOpen }) {
 }
 
 /* ─── List View Row ─── */
-function ListRow({ item, onOpen }) {
+function ListRow({ item, onOpen }: ItemProps) {
   const isFolder = item.type === "folder";
 
   return (
@@ -95,7 +101,13 @@ function ListRow({ item, onOpen }) {
 }
 
 /* ─── Main Component ─── */
-export default function FileGrid({ items, onOpen, viewMode = "grid" }) {
+interface FileGridProps {
+  items: FileSystemNode[];
+  onOpen: (item: FileSystemNode) => void;
+  viewMode?: "grid" | "list";
+}
+
+export default function FileGrid({ items, onOpen, viewMode = "grid" }: FileGridProps) {
   if (!items || items.length === 0) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center gap-3 py-16 sm:py-24">

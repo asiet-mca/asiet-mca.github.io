@@ -10,6 +10,18 @@ import {
 import { getBreadcrumbs } from "../data/fileSystem";
 import { cn } from "../lib/utils";
 
+interface PathBarProps {
+  currentPath: string;
+  onNavigate: (path: string) => void;
+  canGoBack: boolean;
+  canGoForward: boolean;
+  onBack: () => void;
+  onForward: () => void;
+  viewMode: "grid" | "list";
+  onToggleView: (mode: "grid" | "list") => void;
+  onMenuToggle: () => void;
+}
+
 export default function PathBar({
   currentPath,
   onNavigate,
@@ -20,7 +32,7 @@ export default function PathBar({
   viewMode,
   onToggleView,
   onMenuToggle,
-}) {
+}: PathBarProps) {
   const crumbs = getBreadcrumbs(currentPath);
 
   return (

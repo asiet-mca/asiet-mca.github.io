@@ -2,15 +2,23 @@ import { useState, useEffect } from "react";
 import { CaretRight, CaretDown } from "@phosphor-icons/react";
 import { FolderIcon } from "./FileIcon";
 import { cn } from "../lib/utils";
+import type { FileSystemNode } from "../data/fileSystem";
 
-function TreeNode({ node, currentPath, onNavigate, depth = 0 }) {
+interface TreeNodeProps {
+  node: FileSystemNode;
+  currentPath: string;
+  onNavigate: (path: string) => void;
+  depth?: number;
+}
+
+function TreeNode({ node, currentPath, onNavigate, depth = 0 }: TreeNodeProps) {
   const isActive = currentPath === node.path;
   const isAncestor = currentPath.startsWith(node.path + "/");
   const [expanded, setExpanded] = useState(isAncestor);
 
   useEffect(() => {
     if (isAncestor && !expanded) setExpanded(true);
-  }, [currentPath]);
+  }, [currentPath]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const hasChildren = node.children?.some((c) => c.type === "folder");
   const folderChildren = node.children?.filter((c) => c.type === "folder") || [];
@@ -70,7 +78,13 @@ function TreeNode({ node, currentPath, onNavigate, depth = 0 }) {
   );
 }
 
-export default function FolderTree({ tree, currentPath, onNavigate }) {
+interface FolderTreeProps {
+  tree: FileSystemNode;
+  currentPath: string;
+  onNavigate: (path: string) => void;
+}
+
+export default function FolderTree({ tree, currentPath, onNavigate }: FolderTreeProps) {
   return (
     <nav className="py-1">
       {tree.children
