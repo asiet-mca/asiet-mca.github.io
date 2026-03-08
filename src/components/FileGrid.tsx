@@ -47,7 +47,9 @@ function GridCard({ item, onOpen }: ItemProps) {
         </p>
         <p className="mt-0.5 text-[10px] text-text-quaternary sm:text-[11px]">
           {isFolder
-            ? `${item.children?.length || 0} items`
+            ? item.children?.length
+              ? `${item.children.length} items`
+              : "Folder"
             : item.size}
         </p>
       </div>
@@ -88,7 +90,9 @@ function ListRow({ item, onOpen }: ItemProps) {
       )}
       {isFolder && (
         <span className="shrink-0 text-[11px] text-text-quaternary sm:text-[12px]">
-          {item.children?.length || 0} items
+          {item.children?.length
+            ? `${item.children.length} items`
+            : "Folder"}
         </span>
       )}
       {!isFolder && item.size && (
