@@ -1234,7 +1234,7 @@ export default function Admin() {
       ]);
       queryClient.setQueryData<GitHubContent[]>(
         ["contents", currentPath],
-        (old) => old?.filter((i) => i.sha !== item.sha) ?? []
+        (old) => old?.filter((i) => i.name !== item.name) ?? []
       );
       return { prev };
     },
@@ -1243,11 +1243,12 @@ export default function Admin() {
         queryClient.setQueryData(["contents", currentPath], ctx.prev);
       toast(err.message || "Failed to delete", "error");
     },
-    onSettled: (_data, _err, item) => {
-      pollForSync(
-        currentPath,
-        (items) => !items.some((i) => i.name === item.name)
-      );
+    onSettled: () => {
+      // Soft refresh after a delay — no aggressive polling that could
+      // overwrite the optimistic removal with stale API data
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ["contents", currentPath] });
+      }, 4000);
     },
     onSuccess: (item) => {
       toast(`Deleted "${item.name}"`, "success");
