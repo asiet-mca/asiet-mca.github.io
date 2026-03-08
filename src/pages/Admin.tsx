@@ -1427,13 +1427,6 @@ export default function Admin() {
                         : "border-stone-200 hover:border-stone-300"
                     }`}
                   >
-                    {/* Top accent */}
-                    <div
-                      className={`h-0.5 rounded-t-xl ${
-                        item.type === "dir" ? "bg-amber-400" : "bg-blue-400"
-                      }`}
-                    />
-
                     {/* Click target */}
                     <button
                       onClick={() =>
