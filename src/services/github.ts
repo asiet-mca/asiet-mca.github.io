@@ -34,8 +34,15 @@ export class GitHubService {
       : this.config.basePath;
   }
 
+  private encodePath(path: string): string {
+    return path
+      .split("/")
+      .map((seg) => encodeURIComponent(seg))
+      .join("/");
+  }
+
   private contentsUrl(relativePath: string): string {
-    return `${API}/repos/${this.config.owner}/${this.config.repo}/contents/${this.fullPath(relativePath)}`;
+    return `${API}/repos/${this.config.owner}/${this.config.repo}/contents/${this.encodePath(this.fullPath(relativePath))}`;
   }
 
   async verify(): Promise<{ ok: boolean; name?: string; error?: string }> {
