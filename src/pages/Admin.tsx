@@ -1543,8 +1543,8 @@ export default function Admin() {
             />
           </div>
 
-          {/* Content grid */}
-          <div className="mt-5">
+          {/* Content grid — key forces clean DOM on path change */}
+          <div className="mt-5" key={currentPath}>
             {isLoading || !github ? (
               /* Loading skeleton */
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
@@ -1658,7 +1658,7 @@ export default function Admin() {
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                 {contents.map((item) => (
                   <div
-                    key={item.sha}
+                    key={item.name}
                     className={`group relative rounded-xl border bg-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${
                       item.type === "dir"
                         ? "border-amber-200/60 hover:border-amber-300"
