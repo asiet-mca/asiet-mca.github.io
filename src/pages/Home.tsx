@@ -113,7 +113,7 @@ export default function Home() {
           <img
             src="/banner15.webp"
             alt="ASIET Campus Life"
-            decoding="async"
+            fetchPriority="high"
             className="h-full w-full object-cover object-[center_20%]"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[#0C4A6E]/92 via-[#0C4A6E]/75 to-[#0C4A6E]/50 sm:bg-gradient-to-r sm:from-[#0C4A6E]/90 sm:via-[#0C4A6E]/75 sm:to-[#0C4A6E]/40" />
