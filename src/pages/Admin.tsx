@@ -1668,14 +1668,19 @@ export default function Admin() {
                 {contents.map((item) => (
                   <div
                     key={item.name}
-                    className={`group relative rounded-xl border bg-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${
-                      item.type === "dir"
-                        ? "border-amber-200/60 hover:border-amber-300"
-                        : "border-stone-200 hover:border-stone-300"
+                    className={`group relative rounded-xl border bg-white shadow-sm transition-all ${
+                      syncingNames.has(item.name)
+                        ? "pointer-events-none border-amber-200/40 opacity-60"
+                        : `hover:-translate-y-0.5 hover:shadow-md ${
+                            item.type === "dir"
+                              ? "border-amber-200/60 hover:border-amber-300"
+                              : "border-stone-200 hover:border-stone-300"
+                          }`
                     }`}
                   >
                     {/* Click target */}
                     <button
+                      disabled={syncingNames.has(item.name)}
                       onClick={() =>
                         item.type === "dir"
                           ? navigateTo(
