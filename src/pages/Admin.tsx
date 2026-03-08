@@ -1128,6 +1128,7 @@ export default function Admin() {
     mutationFn: async (files: File[]) => {
       let done = 0;
       let failed = 0;
+      const uploaded: string[] = [];
       for (const file of files) {
         setUploadMsg(`Uploading ${++done}/${files.length}: ${file.name}`);
         try {
@@ -1136,17 +1137,24 @@ export default function Admin() {
             ? `${currentPath}/${file.name}`
             : file.name;
           await github!.upload(target, base64);
+          uploaded.push(file.name);
         } catch (err: unknown) {
           failed++;
           const msg = err instanceof Error ? err.message : "Upload failed";
           toast(`Failed: ${file.name} \u2014 ${msg}`, "error");
         }
       }
-      return { total: files.length, failed };
+      return { total: files.length, failed, uploaded };
     },
-    onSettled: () => {
+    onSettled: (_data, _err) => {
       setUploadMsg("");
-      queryClient.invalidateQueries({ queryKey: ["contents"] });
+      const names = _data?.uploaded ?? [];
+      if (names.length > 0) {
+        pollForSync(
+          currentPath,
+          (items) => names.every((n) => items.some((i) => i.name === n))
+        );
+      }
     },
     onSuccess: ({ total, failed }) => {
       const succeeded = total - failed;
