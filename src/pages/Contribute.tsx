@@ -646,6 +646,14 @@ export default function Contribute() {
               Back to Home
             </button>
           </div>
+          <a
+            href="https://ebin.pro"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 block text-center font-mono text-[8px] tracking-wide text-text-quaternary/50 transition-all duration-700 hover:tracking-[0.3em] hover:text-accent/70 sm:mt-4"
+          >
+            // eb
+          </a>
         </div>
       </footer>
     </div>
