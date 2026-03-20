@@ -9,6 +9,7 @@ const Admin = lazy(() => import("./pages/Admin"));
 const Entrance = lazy(() => import("./pages/Entrance"));
 const Contribute = lazy(() => import("./pages/Contribute"));
 const OpenSource = lazy(() => import("./pages/OpenSource"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,6 +34,7 @@ export default function App() {
               <Route path="/entrance" element={<Entrance />} />
               <Route path="/contribute" element={<Contribute />} />
               <Route path="/open-source" element={<OpenSource />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
         </BrowserRouter>
