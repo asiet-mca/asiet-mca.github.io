@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && cp dist/index.html dist/404.html",
+    "build": "tsc -b && vite build && cp dist/index.html dist/404.html && node -e \"const fs=require('fs');const h=fs.readFileSync('dist/index.html');['explorer','admin','entrance','contribute','open-source'].forEach(d=>{fs.mkdirSync('dist/'+d,{recursive:true});fs.writeFileSync('dist/'+d+'/index.html',h)})\"",
     "typecheck": "tsc -b --noEmit",
     "lint": "eslint .",
     "preview": "vite preview"
