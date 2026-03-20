@@ -6,6 +6,8 @@ interface ImportMetaEnv {
   readonly VITE_GITHUB_REPO?: string;
   readonly VITE_GITHUB_BRANCH?: string;
   readonly VITE_GITHUB_BASE_PATH?: string;
+  readonly VITE_ENCRYPTED_CONTRIB_TOKEN?: string;
+  readonly VITE_CONTRIB_PASSPHRASE?: string;
 }
 
 interface ImportMeta {

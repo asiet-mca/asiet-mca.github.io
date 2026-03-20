@@ -51,14 +51,14 @@ export default function Explorer() {
     <div className="flex h-screen overflow-hidden bg-bg">
       <Helmet>
         <title>{pageTitle}</title>
-        <meta name="description" content="Browse and download MCA course materials — notes, assignments, question papers, and lab records from ASIET Kalady." />
-        <meta name="keywords" content="ASIET MCA materials, ASIET MCA notes, ASIET MCA question papers, ASIET MCA assignments, MCA study materials Kalady" />
+        <meta name="description" content="Browse and download ASIET MCA course materials — semester-wise notes, assignments, question papers, and lab records for KTU MCA programme at Adi Shankara Institute, Kalady, Kerala." />
+        <meta name="keywords" content="ASIET MCA materials, ASIET MCA notes, ASIET MCA question papers, ASIET MCA assignments, MCA study materials Kalady, KTU MCA notes, ASIET MCA lab records, MCA semester notes Kerala, ASIET MCA download, MCA question papers Kerala, ASIET Kalady MCA resources, KTU MCA study materials, MCA notes PDF Kerala, ASIET MCA semester 1, ASIET MCA semester 2, ASIET MCA semester 3, ASIET MCA semester 4" />
         <link rel="canonical" href="https://asiet-mca.github.io/explorer" />
         <meta property="og:title" content={pageTitle} />
-        <meta property="og:description" content="Browse and download MCA course materials from ASIET Kalady." />
+        <meta property="og:description" content="Browse and download ASIET MCA course materials — semester-wise notes, question papers & lab records. KTU MCA, Kalady, Kerala." />
         <meta property="og:url" content="https://asiet-mca.github.io/explorer" />
         <meta name="twitter:title" content={pageTitle} />
-        <meta name="twitter:description" content="Browse and download MCA course materials from ASIET Kalady." />
+        <meta name="twitter:description" content="Browse and download ASIET MCA course materials — semester-wise notes, question papers & lab records. KTU MCA, Kalady, Kerala." />
       </Helmet>
 
       {/* Sidebar: hidden on mobile, visible on desktop */}

@@ -29,6 +29,8 @@ jobs:
       - run: npm run build
         env:
           VITE_ENCRYPTED_TOKEN: ${{ secrets.VITE_ENCRYPTED_TOKEN }}
+          VITE_ENCRYPTED_CONTRIB_TOKEN: ${{ secrets.VITE_ENCRYPTED_CONTRIB_TOKEN }}
+          VITE_CONTRIB_PASSPHRASE: ${{ secrets.VITE_CONTRIB_PASSPHRASE }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
