@@ -71,7 +71,7 @@ export default function PDFPreview({ file, url, onClose }: { file: any, url: str
             Previewing PDF
           </span>
           <a 
-            href={url} 
+            href={`https://docs.google.com/gview?url=${url}`}
             target="_blank" 
             rel="noopener noreferrer"
             className="rounded-md bg-accent px-3 py-1.5 text-[11px] font-medium text-white"
