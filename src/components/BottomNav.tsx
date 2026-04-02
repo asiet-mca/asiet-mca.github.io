@@ -1,28 +1,37 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { House, GraduationCapIcon, BookOpenIcon } from "@phosphor-icons/react";
+import { useLocation, Link } from "react-router-dom";
+import { House, GraduationCap, BookOpenText } from "@phosphor-icons/react";
 
 export default function BottomNav() {
-    const [active,setActive] = useState("home");
-    const navigate = useNavigate();
+  const location = useLocation();
 
-    const items=[
-        { name: "home", icon: <House size={24} />, path: "/" },
-        { name: "entrance", icon: <GraduationCapIcon size={24} />, path: "/entrance" },
-        { name: "study materials", icon: <BookOpenIcon size={24} />, path: "/explorer" },
-    ];
-      return (
-    <nav className="fixed bottom-0 w-full bg-white border-t flex justify-around">
-      {items.map(item => (
-        <button
-          key={item.name}
-          onClick={() => { setActive(item.name); navigate(item.path); }}
-          className={`flex flex-col items-center py-2 ${active === item.name ? "text-blue-600" : "text-gray-600"}`}
-        >
-          {item.icon}
-          <span className="text-xs">{item.name}</span>
-        </button>
-      ))}
+  const items = [
+    { name: "Home", icon: House, path: "/" },
+    { name: "Entrance", icon: GraduationCap, path: "/entrance" },
+    { name: "Study Materials", icon: BookOpenText, path: "/explorer" },
+  ];
+
+  return (
+    <nav className="fixed bottom-0 w-full bg-white border-t shadow-md md:hidden z-50">
+      <div className="flex justify-around py-2">
+        {items.map((item) => {
+          const isActive = location.pathname === item.path;
+          return (
+            <Link
+              key={item.name}
+              to={item.path}
+              className={`flex flex-col items-center text-xs ${
+                isActive ? "text-blue-600" : "text-gray-500"
+              }`}
+            >
+              <item.icon
+                size={22}
+                weight={isActive ? "fill" : "duotone"}
+              />
+              <span>{item.name}</span>
+            </Link>
+          );
+        })}
+      </div>
     </nav>
   );
 }
