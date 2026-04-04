@@ -7,7 +7,7 @@ import PathBar from "../components/PathBar";
 import FileGrid from "../components/FileGrid";
 import { useGitHubExplorer } from "../hooks/useGitHubExplorer";
 import type { FileSystemNode } from "../data/fileSystem";
-import PDFPreview from "../components/PDFPreviewModal";
+import PDFPreview from "../components/PDFPreview";
 
 export default function Explorer() {
   const [searchParams, setSearchParams] = useSearchParams();
