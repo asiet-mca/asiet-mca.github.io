@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HelmetProvider } from "react-helmet-async";
+import AppLayout from "./AppLayout"; // import layout
 
 const Home = lazy(() => import("./pages/Home"));
 const Explorer = lazy(() => import("./pages/Explorer"));
@@ -28,13 +29,16 @@ export default function App() {
         <BrowserRouter>
           <Suspense>
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/explorer" element={<Explorer />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/entrance" element={<Entrance />} />
-              <Route path="/contribute" element={<Contribute />} />
-              <Route path="/open-source" element={<OpenSource />} />
-              <Route path="*" element={<NotFound />} />
+              {/* Wrap all routes inside AppLayout */}
+              <Route element={<AppLayout />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/explorer" element={<Explorer />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/entrance" element={<Entrance />} />
+                <Route path="/contribute" element={<Contribute />} />
+                <Route path="/open-source" element={<OpenSource />} />
+                <Route path="*" element={<NotFound />} />
+              </Route>
             </Routes>
           </Suspense>
         </BrowserRouter>
