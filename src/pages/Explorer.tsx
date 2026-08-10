@@ -1,12 +1,13 @@
 import { useState, useCallback } from "react";
 import { Helmet } from "react-helmet-async";
 import { useSearchParams } from "react-router-dom";
-import { SpinnerGap } from "@phosphor-icons/react";
+import { SpinnerGapIcon } from "@phosphor-icons/react";
 import Sidebar from "../components/Sidebar";
 import PathBar from "../components/PathBar";
 import FileGrid from "../components/FileGrid";
 import { useGitHubExplorer } from "../hooks/useGitHubExplorer";
 import type { FileSystemNode } from "../data/fileSystem";
+import PDFPreview from "../components/PDFPreview";
 
 export default function Explorer() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -15,6 +16,7 @@ export default function Explorer() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [previewFile, setPreviewFile] = useState<FileSystemNode | null>(null);
 
   const { tree, currentNode, isLoading, getDownloadUrl } =
     useGitHubExplorer(currentPath);
@@ -31,6 +33,8 @@ export default function Explorer() {
     (item: FileSystemNode) => {
       if (item.type === "folder") {
         navigateTo(item.path);
+      } else if (item.name.toLowerCase().endsWith(".pdf")) {
+        setPreviewFile(item);
       } else {
         window.open(getDownloadUrl(item), "_blank");
       }
@@ -119,7 +123,7 @@ export default function Explorer() {
         <main className="flex-1 overflow-y-auto" key={currentPath}>
           {isLoading ? (
             <div className="flex flex-1 flex-col items-center justify-center gap-3 py-24">
-              <SpinnerGap
+              <SpinnerGapIcon
                 size={24}
                 className="animate-spin text-text-quaternary"
               />
@@ -142,6 +146,15 @@ export default function Explorer() {
           <span className="ml-2 truncate">{currentPath}</span>
         </div>
       </div>
+
+      {previewFile && (
+        <PDFPreview 
+          file={previewFile} 
+          url={getDownloadUrl(previewFile)} 
+          onClose={() => setPreviewFile(null)} 
+        />
+      )}
     </div>
   );
 }
+
